@@ -46,7 +46,7 @@ public class FunctionCall extends Expression {
         }
 
         int jumpStateIndex = state.size() + 2;
-        state.addInstruction(new Instruction(InstructionType.SET_REGISTER, 8).setSignalC(() -> jumpStateIndex - function.getEndIndex()));
+        state.addInstruction(new Instruction(InstructionType.SET_REGISTER, 1).setSignalC(() -> jumpStateIndex - function.getEndIndex()));
         state.pushReg(1);
 
         Instruction jumpInstruction = new Instruction(InstructionType.JUMP_CONSTANT_OFFSET)
