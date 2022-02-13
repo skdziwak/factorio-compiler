@@ -30,10 +30,11 @@ public class IfElseStatement extends Statement {
         positive.compile(state);
         int ifEscapeIndex = state.size();
         state.addInstruction(ifEscapeInstruction);
+        int negativeIndex = state.size();
         negative.compile(state);
         int endIndex = state.size();
 
-        ifInstruction.setSignalB(endIndex - ifIndex - 1);
+        ifInstruction.setSignalB(negativeIndex - ifIndex - 1);
         ifEscapeInstruction.setSignalB(endIndex - ifEscapeIndex - 1);
     }
 }
