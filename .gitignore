@@ -1,0 +1,7 @@
+/.idea/
+*.fasm
+*.iml
+target
+.attach_pid*
+*.fcl
+*.json
