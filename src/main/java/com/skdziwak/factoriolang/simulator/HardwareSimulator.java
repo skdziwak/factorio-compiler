@@ -1,15 +1,15 @@
 package com.skdziwak.factoriolang.simulator;
 
-import com.skdziwak.factoriolang.FactorioConstants;
+import com.skdziwak.factoriolang.HardwareConstants;
 import com.skdziwak.factoriolang.compilation.Instruction;
 
 import java.util.LinkedList;
 import java.util.List;
 
-public class FactorioSimulator {
-    private final int[] registers = new int[FactorioConstants.REGISTERS_COUNT];
+public class HardwareSimulator {
+    private final int[] registers = new int[HardwareConstants.REGISTERS_COUNT];
     private final LinkedList<Integer> stack = new LinkedList<>();
-    private final int[] ram = new int[FactorioConstants.RAM_SIZE];
+    private final int[] ram = new int[HardwareConstants.RAM_SIZE];
     private int currentIndex = 0;
 
     public void simulate(List<Instruction> instructionList) {
@@ -30,16 +30,16 @@ public class FactorioSimulator {
     private void validateRamIndex(int index) {
         if (index < 1) {
             throw new SimulationException("Unable to access RAM at address lower than 1");
-        } else if (index > FactorioConstants.RAM_SIZE) {
-            throw new SimulationException("Unable to access RAM at address greater than " + FactorioConstants.RAM_SIZE);
+        } else if (index > HardwareConstants.RAM_SIZE) {
+            throw new SimulationException("Unable to access RAM at address greater than " + HardwareConstants.RAM_SIZE);
         }
     }
 
     private void validateRegisterIndex(int index) {
         if (index < 1) {
             throw new SimulationException("Unable to access register at address lower than 1");
-        } else if (index > FactorioConstants.RAM_SIZE) {
-            throw new SimulationException("Unable to access register at address greater than " + FactorioConstants.REGISTERS_COUNT);
+        } else if (index > HardwareConstants.RAM_SIZE) {
+            throw new SimulationException("Unable to access register at address greater than " + HardwareConstants.REGISTERS_COUNT);
         }
     }
 
@@ -71,7 +71,7 @@ public class FactorioSimulator {
     }
 
     private void pushStack(int value) {
-        if (this.stack.size() == FactorioConstants.STACK_SIZE) {
+        if (this.stack.size() == HardwareConstants.STACK_SIZE) {
             throw new SimulationException("Stack overflow");
         }
         this.stack.push(value);

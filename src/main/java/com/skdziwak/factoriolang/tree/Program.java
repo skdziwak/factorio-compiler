@@ -1,11 +1,11 @@
 package com.skdziwak.factoriolang.tree;
 
-import com.skdziwak.factoriolang.FactorioConstants;
 import com.skdziwak.factoriolang.compilation.interfaces.Compilable;
 import com.skdziwak.factoriolang.compilation.CompilationState;
 import com.skdziwak.factoriolang.compilation.Instruction;
 import com.skdziwak.factoriolang.compilation.interfaces.PostCompilable;
 import com.skdziwak.factoriolang.compilation.interfaces.PreCompilable;
+import com.skdziwak.factoriolang.constants.InstructionType;
 import com.skdziwak.factoriolang.tree.functions.Function;
 
 import java.util.ArrayList;
@@ -25,7 +25,7 @@ public class Program implements Compilable, PreCompilable, PostCompilable {
 
     @Override
     public void compile(CompilationState state) {
-        Instruction initialJump = new Instruction(FactorioConstants.JUMP_CONSTANT_OFFSET);
+        Instruction initialJump = new Instruction(InstructionType.JUMP_CONSTANT_OFFSET);
         state.addInstruction(initialJump);
         this.functions.forEach(function -> function.compile(state));
         initialJump.setSignalB(state.size() - 1);

@@ -1,8 +1,8 @@
 package com.skdziwak.factoriolang.tree.statements;
 
-import com.skdziwak.factoriolang.FactorioConstants;
 import com.skdziwak.factoriolang.compilation.CompilationState;
 import com.skdziwak.factoriolang.compilation.Instruction;
+import com.skdziwak.factoriolang.constants.InstructionType;
 import com.skdziwak.factoriolang.tree.Expression;
 import com.skdziwak.factoriolang.tree.Statement;
 
@@ -22,13 +22,13 @@ public class WhileStatement extends Statement {
         state.popReg(1);
 
         int escapeStateIndex = state.size();
-        Instruction escapeInstruction = new Instruction(FactorioConstants.CONDITIONAL_JUMP_CONSTANT_OFFSET);
+        Instruction escapeInstruction = new Instruction(InstructionType.CONDITIONAL_JUMP_CONSTANT_OFFSET);
         state.addInstruction(escapeInstruction);
 
         statement.compile(state);
 
         int loopIndex = state.size();
-        Instruction loopInstruction = new Instruction(FactorioConstants.JUMP_CONSTANT_OFFSET);
+        Instruction loopInstruction = new Instruction(InstructionType.JUMP_CONSTANT_OFFSET);
         state.addInstruction(loopInstruction);
         int endIndex = state.size();
 

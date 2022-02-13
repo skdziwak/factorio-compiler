@@ -1,5 +1,7 @@
 package com.skdziwak.factoriolang.compilation;
 
+import com.skdziwak.factoriolang.constants.InstructionType;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -8,20 +10,20 @@ public class Instruction {
     private IntegerProvider signalB;
     private IntegerProvider signalC;
 
-    public Instruction(int signalA) {
-        this.signalA = new ConstantInteger(signalA);
+    public Instruction(InstructionType instructionType) {
+        this.signalA = new ConstantInteger(instructionType.getSignal());
         this.signalB = new ConstantInteger(0);
         this.signalC = new ConstantInteger(0);
     }
 
-    public Instruction(int signalA, int signalB) {
-        this.signalA = new ConstantInteger(signalA);
+    public Instruction(InstructionType instructionType, int signalB) {
+        this.signalA = new ConstantInteger(instructionType.getSignal());
         this.signalB = new ConstantInteger(signalB);
         this.signalC = new ConstantInteger(0);
     }
 
-    public Instruction(int signalA, int signalB, int signalC) {
-        this.signalA = new ConstantInteger(signalA);
+    public Instruction(InstructionType instructionType, int signalB, int signalC) {
+        this.signalA = new ConstantInteger(instructionType.getSignal());
         this.signalB = new ConstantInteger(signalB);
         this.signalC = new ConstantInteger(signalC);
     }

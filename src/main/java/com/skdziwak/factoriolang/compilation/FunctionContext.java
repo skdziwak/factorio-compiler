@@ -1,8 +1,7 @@
 package com.skdziwak.factoriolang.compilation;
 
-import com.skdziwak.factoriolang.FactorioConstants;
+import com.skdziwak.factoriolang.HardwareConstants;
 
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,7 +24,7 @@ public class FunctionContext {
         if (variables.contains(identifier)) {
             throw new CompilationException("Variable " + identifier + " is already defined in local scope!");
         } else {
-            int maxVariables = FactorioConstants.FUNCTION_ARG_REGISTERS.length;
+            int maxVariables = HardwareConstants.FUNCTION_ARG_REGISTERS.length;
             if (variables.size() >= maxVariables) {
                 throw new CompilationException("Too many variables. You can use up to " + maxVariables + " local variables including function arguments.");
             } else {

@@ -1,6 +1,6 @@
 package com.skdziwak.factoriolang.tree.statements;
 
-import com.skdziwak.factoriolang.FactorioConstants;
+import com.skdziwak.factoriolang.HardwareConstants;
 import com.skdziwak.factoriolang.compilation.CompilationState;
 import com.skdziwak.factoriolang.compilation.FunctionContext;
 import com.skdziwak.factoriolang.tree.Expression;
@@ -25,7 +25,7 @@ public class AssignmentStatement extends Statement {
         } else {
             value.compile(state);
             state.popReg(1);
-            state.copyRegister(1, FactorioConstants.FUNCTION_ARG_REGISTERS[functionContext.indexOfVariable(variable)]);
+            state.copyRegister(1, HardwareConstants.FUNCTION_ARG_REGISTERS[functionContext.indexOfVariable(variable)]);
         }
     }
 }

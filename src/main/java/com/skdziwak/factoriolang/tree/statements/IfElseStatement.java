@@ -1,8 +1,8 @@
 package com.skdziwak.factoriolang.tree.statements;
 
-import com.skdziwak.factoriolang.FactorioConstants;
 import com.skdziwak.factoriolang.compilation.CompilationState;
 import com.skdziwak.factoriolang.compilation.Instruction;
+import com.skdziwak.factoriolang.constants.InstructionType;
 import com.skdziwak.factoriolang.tree.Expression;
 import com.skdziwak.factoriolang.tree.Statement;
 
@@ -23,8 +23,8 @@ public class IfElseStatement extends Statement {
         state.popReg(1);
 
         int ifIndex = state.size();
-        Instruction ifInstruction = new Instruction(FactorioConstants.CONDITIONAL_JUMP_CONSTANT_OFFSET);
-        Instruction ifEscapeInstruction = new Instruction(FactorioConstants.JUMP_CONSTANT_OFFSET);
+        Instruction ifInstruction = new Instruction(InstructionType.CONDITIONAL_JUMP_CONSTANT_OFFSET);
+        Instruction ifEscapeInstruction = new Instruction(InstructionType.JUMP_CONSTANT_OFFSET);
 
         state.addInstruction(ifInstruction);
         positive.compile(state);

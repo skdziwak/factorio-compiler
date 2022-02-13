@@ -1,6 +1,6 @@
 package com.skdziwak.factoriolang.tree.expressions;
 
-import com.skdziwak.factoriolang.FactorioConstants;
+import com.skdziwak.factoriolang.HardwareConstants;
 import com.skdziwak.factoriolang.compilation.CompilationState;
 import com.skdziwak.factoriolang.compilation.FunctionContext;
 import com.skdziwak.factoriolang.tree.Expression;
@@ -20,7 +20,7 @@ public class VariableExpression extends Expression {
             state.pushReg(1);
         } else {
             state.copyRegister(
-                    FactorioConstants.FUNCTION_ARG_REGISTERS[functionContext.indexOfVariable(variable)],
+                    HardwareConstants.FUNCTION_ARG_REGISTERS[functionContext.indexOfVariable(variable)],
                     1
             );
             state.pushReg(1);

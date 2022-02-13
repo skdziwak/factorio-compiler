@@ -1,9 +1,10 @@
 package com.skdziwak.factoriolang.tree.functions;
 
-import com.skdziwak.factoriolang.FactorioConstants;
+import com.skdziwak.factoriolang.HardwareConstants;
 import com.skdziwak.factoriolang.compilation.*;
 import com.skdziwak.factoriolang.compilation.interfaces.Compilable;
 import com.skdziwak.factoriolang.compilation.interfaces.PreCompilable;
+import com.skdziwak.factoriolang.constants.InstructionType;
 import com.skdziwak.factoriolang.tree.Statement;
 
 import java.util.List;
@@ -55,7 +56,7 @@ public class Function implements Compilable, PreCompilable {
         if (this.returns != null) {
             if (functionContext.containsVariable(returns)) {
                 state.copyRegister(
-                        FactorioConstants.FUNCTION_ARG_REGISTERS[functionContext.indexOfVariable(returns)], 1
+                        HardwareConstants.FUNCTION_ARG_REGISTERS[functionContext.indexOfVariable(returns)], 1
                 );
             } else {
                 throw new CompilationException("Unable to return variable " + returns + " from function " + identifier
@@ -65,7 +66,7 @@ public class Function implements Compilable, PreCompilable {
 
         state.setFunctionContext(null);
         state.popReg(8);
-        Instruction jumpInstruction = new Instruction(FactorioConstants.JUMP_DYNAMIC_OFFSET);
+        Instruction jumpInstruction = new Instruction(InstructionType.JUMP_DYNAMIC_OFFSET);
         state.addInstruction(jumpInstruction);
         this.endIndex = state.size() - 1;
     }

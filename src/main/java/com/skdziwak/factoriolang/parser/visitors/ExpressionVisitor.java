@@ -2,7 +2,7 @@ package com.skdziwak.factoriolang.parser.visitors;
 
 import com.skdziwak.factoriolang.antlr4.LangBaseVisitor;
 import com.skdziwak.factoriolang.antlr4.LangParser;
-import com.skdziwak.factoriolang.compilation.CompilationState;
+import com.skdziwak.factoriolang.constants.MathOperator;
 import com.skdziwak.factoriolang.parser.ParsingException;
 import com.skdziwak.factoriolang.tree.Expression;
 import com.skdziwak.factoriolang.tree.expressions.*;
@@ -28,7 +28,7 @@ public class ExpressionVisitor extends LangBaseVisitor<Expression> {
 
     @Override
     public Expression visitUnaryNot(LangParser.UnaryNotContext ctx) {
-        return new BinaryOperation(new ConstantExpression(0), CompilationState.Operator.EQUALS, ctx.getChild(1).accept(this));
+        return new BinaryOperation(new ConstantExpression(0), MathOperator.EQUALS, ctx.getChild(1).accept(this));
     }
 
     @Override
@@ -53,7 +53,7 @@ public class ExpressionVisitor extends LangBaseVisitor<Expression> {
 
     @Override
     public Expression visitUnaryMinus(LangParser.UnaryMinusContext ctx) {
-        return new BinaryOperation(new ConstantExpression(0), CompilationState.Operator.SUBTRACT, ctx.getChild(1).accept(this));
+        return new BinaryOperation(new ConstantExpression(0), MathOperator.SUBTRACT, ctx.getChild(1).accept(this));
     }
 
     @Override
@@ -87,22 +87,22 @@ public class ExpressionVisitor extends LangBaseVisitor<Expression> {
         Expression left = ctx.getChild(0).accept(this);
         String operatorString = ctx.getChild(1).getText();
         Expression right = ctx.getChild(2).accept(this);
-        CompilationState.Operator operator = switch (operatorString) {
-            case "+" -> CompilationState.Operator.ADD;
-            case "-" -> CompilationState.Operator.SUBTRACT;
-            case "*" -> CompilationState.Operator.MULTIPLY;
-            case "/" -> CompilationState.Operator.DIVIDE;
-            case "%" -> CompilationState.Operator.MODULO;
-            case "<<" -> CompilationState.Operator.SHIFT_LEFT;
-            case ">>" -> CompilationState.Operator.SHIFT_RIGHT;
-            case "==" -> CompilationState.Operator.EQUALS;
-            case "!=" -> CompilationState.Operator.NOT_EQUALS;
-            case ">" -> CompilationState.Operator.GREATER;
-            case "<" -> CompilationState.Operator.LOWER;
-            case ">=" -> CompilationState.Operator.GREATER_EQUAL;
-            case "<=" -> CompilationState.Operator.LOWER_EQUAL;
+        MathOperator mathOperator = switch (operatorString) {
+            case "+" -> MathOperator.ADD;
+            case "-" -> MathOperator.SUBTRACT;
+            case "*" -> MathOperator.MULTIPLY;
+            case "/" -> MathOperator.DIVIDE;
+            case "%" -> MathOperator.MODULO;
+            case "<<" -> MathOperator.SHIFT_LEFT;
+            case ">>" -> MathOperator.SHIFT_RIGHT;
+            case "==" -> MathOperator.EQUALS;
+            case "!=" -> MathOperator.NOT_EQUALS;
+            case ">" -> MathOperator.GREATER;
+            case "<" -> MathOperator.LOWER;
+            case ">=" -> MathOperator.GREATER_EQUAL;
+            case "<=" -> MathOperator.LOWER_EQUAL;
             default -> throw new ParsingException("Invalid operator");
         };
-        return new BinaryOperation(left, operator, right);
+        return new BinaryOperation(left, mathOperator, right);
     }
 }

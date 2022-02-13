@@ -1,10 +1,11 @@
 package com.skdziwak.factoriolang.tree.expressions;
 
-import com.skdziwak.factoriolang.FactorioConstants;
+import com.skdziwak.factoriolang.HardwareConstants;
 import com.skdziwak.factoriolang.compilation.CompilationException;
 import com.skdziwak.factoriolang.compilation.CompilationState;
 import com.skdziwak.factoriolang.compilation.FunctionContext;
 import com.skdziwak.factoriolang.compilation.Instruction;
+import com.skdziwak.factoriolang.constants.InstructionType;
 import com.skdziwak.factoriolang.tree.Expression;
 import com.skdziwak.factoriolang.tree.functions.Function;
 
@@ -27,7 +28,7 @@ public class FunctionCall extends Expression {
         FunctionContext functionContext = state.getFunctionContext();
 
         if (functionContext != null) {
-            Arrays.stream(FactorioConstants.FUNCTION_ARG_REGISTERS, 0, functionContext.numberOfVariables()).forEach(state::pushReg);
+            Arrays.stream(HardwareConstants.FUNCTION_ARG_REGISTERS, 0, functionContext.numberOfVariables()).forEach(state::pushReg);
         }
 
         Function function = state.getFunction(identifier);
@@ -41,19 +42,19 @@ public class FunctionCall extends Expression {
         for (int i = 0 ; i < arguments.size() ; i++) {
             arguments.get(i).compile(state);
             state.popReg(1);
-            state.copyRegister(1, FactorioConstants.FUNCTION_ARG_REGISTERS[i]);
+            state.copyRegister(1, HardwareConstants.FUNCTION_ARG_REGISTERS[i]);
         }
 
         int jumpStateIndex = state.size() + 2;
-        state.addInstruction(new Instruction(FactorioConstants.SET_REGISTER).setSignalB(() -> jumpStateIndex - function.getEndIndex()));
+        state.addInstruction(new Instruction(InstructionType.SET_REGISTER).setSignalB(() -> jumpStateIndex - function.getEndIndex()));
         state.pushReg(1);
 
-        Instruction jumpInstruction = new Instruction(FactorioConstants.JUMP_CONSTANT_OFFSET)
+        Instruction jumpInstruction = new Instruction(InstructionType.JUMP_CONSTANT_OFFSET)
                 .setSignalB(() -> function.getStartIndex() - jumpStateIndex - 1);
         state.addInstruction(jumpInstruction);
 
         if (functionContext != null) {
-            Arrays.stream(FactorioConstants.FUNCTION_ARG_REGISTERS, 0, functionContext.numberOfVariables()).boxed().sorted(Collections.reverseOrder()).forEach(state::popReg);
+            Arrays.stream(HardwareConstants.FUNCTION_ARG_REGISTERS, 0, functionContext.numberOfVariables()).boxed().sorted(Collections.reverseOrder()).forEach(state::popReg);
         }
 
         state.pushReg(1);
