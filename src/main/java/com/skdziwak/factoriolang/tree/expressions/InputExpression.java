@@ -1,6 +1,5 @@
 package com.skdziwak.factoriolang.tree.expressions;
 
-import com.skdziwak.factoriolang.compilation.Compilable;
 import com.skdziwak.factoriolang.compilation.CompilationState;
 import com.skdziwak.factoriolang.tree.Expression;
 

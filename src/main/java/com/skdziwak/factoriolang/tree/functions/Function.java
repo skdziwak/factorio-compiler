@@ -2,6 +2,7 @@ package com.skdziwak.factoriolang.tree.functions;
 
 import com.skdziwak.factoriolang.FactorioConstants;
 import com.skdziwak.factoriolang.compilation.*;
+import com.skdziwak.factoriolang.compilation.interfaces.Compilable;
 import com.skdziwak.factoriolang.tree.Statement;
 
 import java.util.List;
