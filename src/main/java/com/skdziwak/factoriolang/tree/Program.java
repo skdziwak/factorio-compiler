@@ -26,7 +26,7 @@ public class Program implements Compilable, PreCompilable, PostCompilable {
     @Override
     public void compile(CompilationState state) {
         Instruction initialJump = new Instruction(FactorioConstants.JUMP_CONSTANT_OFFSET);
-        state.addState(initialJump);
+        state.addInstruction(initialJump);
         this.functions.forEach(function -> function.compile(state));
         initialJump.setSignalB(state.size() - 1);
         this.statements.forEach(statement -> statement.compile(state));
@@ -48,11 +48,7 @@ public class Program implements Compilable, PreCompilable, PostCompilable {
 
     @Override
     public void preCompile(CompilationState state) {
-        this.functions.forEach(compilable -> {
-            if (compilable instanceof PreCompilable preCompilable) {
-                preCompilable.preCompile(state);
-            }
-        });
+        this.functions.forEach(function -> function.preCompile(state));
         this.statements.forEach(compilable -> {
             if (compilable instanceof PreCompilable preCompilable) {
                 preCompilable.preCompile(state);

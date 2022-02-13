@@ -45,12 +45,12 @@ public class FunctionCall extends Expression {
         }
 
         int jumpStateIndex = state.size() + 2;
-        state.setRegister(1, jumpStateIndex - function.getEndIndex());
+        state.addInstruction(new Instruction(FactorioConstants.SET_REGISTER).setSignalB(() -> jumpStateIndex - function.getEndIndex()));
         state.pushReg(1);
 
-        Instruction jumpInstruction = new Instruction(FactorioConstants.JUMP_CONSTANT_OFFSET,
-                function.getStartIndex() - jumpStateIndex - 1);
-        state.addState(jumpInstruction);
+        Instruction jumpInstruction = new Instruction(FactorioConstants.JUMP_CONSTANT_OFFSET)
+                .setSignalB(() -> function.getStartIndex() - jumpStateIndex - 1);
+        state.addInstruction(jumpInstruction);
 
         if (functionContext != null) {
             Arrays.stream(FactorioConstants.FUNCTION_ARG_REGISTERS, 0, functionContext.numberOfVariables()).boxed().sorted(Collections.reverseOrder()).forEach(state::popReg);

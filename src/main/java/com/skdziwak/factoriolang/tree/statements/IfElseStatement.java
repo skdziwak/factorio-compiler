@@ -26,10 +26,10 @@ public class IfElseStatement extends Statement {
         Instruction ifInstruction = new Instruction(FactorioConstants.CONDITIONAL_JUMP_CONSTANT_OFFSET);
         Instruction ifEscapeInstruction = new Instruction(FactorioConstants.JUMP_CONSTANT_OFFSET);
 
-        state.addState(ifInstruction);
+        state.addInstruction(ifInstruction);
         positive.compile(state);
         int ifEscapeIndex = state.size();
-        state.addState(ifEscapeInstruction);
+        state.addInstruction(ifEscapeInstruction);
         negative.compile(state);
         int endIndex = state.size();
 

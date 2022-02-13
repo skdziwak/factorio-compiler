@@ -3,11 +3,12 @@ package com.skdziwak.factoriolang.tree.functions;
 import com.skdziwak.factoriolang.FactorioConstants;
 import com.skdziwak.factoriolang.compilation.*;
 import com.skdziwak.factoriolang.compilation.interfaces.Compilable;
+import com.skdziwak.factoriolang.compilation.interfaces.PreCompilable;
 import com.skdziwak.factoriolang.tree.Statement;
 
 import java.util.List;
 
-public class Function implements Compilable {
+public class Function implements Compilable, PreCompilable {
     private final String identifier;
     private final List<String> arguments;
     private final List<Statement> statements;
@@ -65,8 +66,12 @@ public class Function implements Compilable {
         state.setFunctionContext(null);
         state.popReg(8);
         Instruction jumpInstruction = new Instruction(FactorioConstants.JUMP_DYNAMIC_OFFSET);
-        state.addState(jumpInstruction);
-        state.addFunction(this);
+        state.addInstruction(jumpInstruction);
         this.endIndex = state.size() - 1;
+    }
+
+    @Override
+    public void preCompile(CompilationState state) {
+        state.addFunction(this);
     }
 }

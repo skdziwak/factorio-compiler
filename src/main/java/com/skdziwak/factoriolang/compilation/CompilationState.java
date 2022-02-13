@@ -99,7 +99,7 @@ public class CompilationState {
         }
     }
 
-    public void addState(Instruction instruction) {
+    public void addInstruction(Instruction instruction) {
         this.instructions.add(instruction);
     }
 

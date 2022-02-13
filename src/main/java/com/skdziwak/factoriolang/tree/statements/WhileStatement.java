@@ -23,13 +23,13 @@ public class WhileStatement extends Statement {
 
         int escapeStateIndex = state.size();
         Instruction escapeInstruction = new Instruction(FactorioConstants.CONDITIONAL_JUMP_CONSTANT_OFFSET);
-        state.addState(escapeInstruction);
+        state.addInstruction(escapeInstruction);
 
         statement.compile(state);
 
         int loopIndex = state.size();
         Instruction loopInstruction = new Instruction(FactorioConstants.JUMP_CONSTANT_OFFSET);
-        state.addState(loopInstruction);
+        state.addInstruction(loopInstruction);
         int endIndex = state.size();
 
         escapeInstruction.setSignalB(endIndex - escapeStateIndex - 1);

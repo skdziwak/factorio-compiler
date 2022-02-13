@@ -23,7 +23,7 @@ public class IfStatement extends Statement {
 
         int jumpIndex = state.size();
         Instruction jumpInstruction = new Instruction(FactorioConstants.CONDITIONAL_JUMP_CONSTANT_OFFSET);
-        state.addState(jumpInstruction);
+        state.addInstruction(jumpInstruction);
 
         statement.compile(state);
         int endIndex = state.size();
