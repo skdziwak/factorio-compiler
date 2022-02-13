@@ -24,7 +24,7 @@ public class CompilationState {
 
     public void copyRegister(int reg1, int reg2) {
         if (reg1 != reg2 || !optimize) {
-            Instruction instruction = new Instruction(InstructionType.COPY_REG_TO_REG, reg1, reg1);
+            Instruction instruction = new Instruction(InstructionType.COPY_REG_TO_REG, reg1, reg2);
             instructions.add(instruction);
         }
     }
