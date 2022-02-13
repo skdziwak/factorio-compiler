@@ -17,20 +17,20 @@ public class WhileStatement extends Statement {
 
     @Override
     public void compile(CompilationState state) {
-        int startIndex = state.size();
+        int startIndex = state.getNextIndex();
         condition.compile(state);
         state.popReg(1);
 
-        int escapeStateIndex = state.size();
+        int escapeStateIndex = state.getNextIndex();
         Instruction escapeInstruction = new Instruction(InstructionType.CONDITIONAL_JUMP_CONSTANT_OFFSET);
         state.addInstruction(escapeInstruction);
 
         statement.compile(state);
 
-        int loopIndex = state.size();
+        int loopIndex = state.getNextIndex();
         Instruction loopInstruction = new Instruction(InstructionType.JUMP_CONSTANT_OFFSET);
         state.addInstruction(loopInstruction);
-        int endIndex = state.size();
+        int endIndex = state.getNextIndex();
 
         escapeInstruction.setSignalB(endIndex - escapeStateIndex - 1);
         loopInstruction.setSignalB(startIndex - loopIndex - 1);

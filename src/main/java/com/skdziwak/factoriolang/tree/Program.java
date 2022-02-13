@@ -28,7 +28,7 @@ public class Program implements Compilable, PreCompilable, PostCompilable {
         Instruction initialJump = new Instruction(InstructionType.JUMP_CONSTANT_OFFSET);
         state.addInstruction(initialJump);
         this.functions.forEach(function -> function.compile(state));
-        initialJump.setSignalB(state.size() - 1);
+        initialJump.setSignalB(state.getNextIndex() - 1);
         this.statements.forEach(statement -> statement.compile(state));
     }
 

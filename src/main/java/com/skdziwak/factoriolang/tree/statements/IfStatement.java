@@ -21,12 +21,12 @@ public class IfStatement extends Statement {
         condition.compile(state);
         state.popReg(1);
 
-        int jumpIndex = state.size();
+        int jumpIndex = state.getNextIndex();
         Instruction jumpInstruction = new Instruction(InstructionType.CONDITIONAL_JUMP_CONSTANT_OFFSET);
         state.addInstruction(jumpInstruction);
 
         statement.compile(state);
-        int endIndex = state.size();
+        int endIndex = state.getNextIndex();
         jumpInstruction.setSignalB(endIndex - jumpIndex - 1);
     }
 }

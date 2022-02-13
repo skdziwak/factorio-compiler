@@ -17,31 +17,41 @@ public class CompilationState {
     private final Map<String, Function> functions = new HashMap<>();
     private FunctionContext functionContext;
     private boolean optimize = true;
+    private boolean skipNextOptimisation = false;
 
     public void noOptimisations() {
         this.optimize = false;
     }
 
+    private boolean checkOptimize() {
+        return optimize && !skipNextOptimisation;
+    }
+
+    private void consumeNextOptimisationSkip() {
+        skipNextOptimisation = false;
+    }
+
     public void copyRegister(int reg1, int reg2) {
-        if (reg1 != reg2 || !optimize) {
+        if (reg1 != reg2 || !checkOptimize()) {
             Instruction instruction = new Instruction(InstructionType.COPY_REG_TO_REG, reg1, reg2);
-            instructions.add(instruction);
+            addInstruction(instruction);
         }
+        consumeNextOptimisationSkip();
     }
 
     public void math(MathOperator mathOperator) {
         Instruction instruction = new Instruction(InstructionType.MATH, mathOperator.sig);
-        instructions.add(instruction);
+        addInstruction(instruction);
     }
 
     public void setRegister(int reg, int value) {
         Instruction instruction = new Instruction(InstructionType.SET_REGISTER, reg, value);
-        instructions.add(instruction);
+        addInstruction(instruction);
     }
 
     public void pushReg(int reg) {
         Instruction instruction = new Instruction(InstructionType.PUSH_REG_TO_STACK, reg);
-        instructions.add(instruction);
+        addInstruction(instruction);
     }
 
     public void popReg(int reg) {
@@ -50,28 +60,29 @@ public class CompilationState {
             instructions.remove(instructions.size() - 1);
         } else {
             Instruction instruction = new Instruction(InstructionType.POP_STACK_TO_REG, reg);
-            instructions.add(instruction);
+            addInstruction(instruction);
         }
+        consumeNextOptimisationSkip();
     }
 
     public void copyRegisterToRAM(int reg, int ram) {
         Instruction instruction = new Instruction(InstructionType.COPY_REG_TO_RAM, reg, ram);
-        instructions.add(instruction);
+        addInstruction(instruction);
     }
 
     public void copyRAMtoRegister(int ram, int reg) {
         Instruction instruction = new Instruction(InstructionType.COPY_RAM_TO_REG, ram, reg);
-        instructions.add(instruction);
+        addInstruction(instruction);
     }
 
     public void copyInput(int in, int reg) {
         Instruction instruction = new Instruction(InstructionType.COPY_INPUT_TO_REG, in, reg);
-        instructions.add(instruction);
+        addInstruction(instruction);
     }
 
     public void copyOutput(int reg, int out) {
         Instruction instruction = new Instruction(InstructionType.COPY_REG_TO_OUTPUT, reg, out);
-        instructions.add(instruction);
+        addInstruction(instruction);
     }
 
     public void addFunction(Function function) {
@@ -102,13 +113,15 @@ public class CompilationState {
 
     public void addInstruction(Instruction instruction) {
         this.instructions.add(instruction);
+        consumeNextOptimisationSkip();
     }
 
     public String getStatesString() {
         return this.instructions.stream().map(String::valueOf).collect(Collectors.joining("\n"));
     }
 
-    public int size() {
+    public int getNextIndex() {
+        this.skipNextOptimisation = true;
         return this.instructions.size();
     }
 

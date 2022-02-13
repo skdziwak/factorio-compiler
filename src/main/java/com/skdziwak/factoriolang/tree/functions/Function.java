@@ -48,7 +48,7 @@ public class Function implements Compilable, PreCompilable {
         FunctionContext functionContext = new FunctionContext();
         arguments.forEach(functionContext::declareVariable);
 
-        this.startIndex = state.size();
+        this.startIndex = state.getNextIndex();
         state.setFunctionContext(functionContext);
 
         statements.forEach(statement -> statement.compile(state));
@@ -68,7 +68,7 @@ public class Function implements Compilable, PreCompilable {
         state.popReg(8);
         Instruction jumpInstruction = new Instruction(InstructionType.JUMP_DYNAMIC_OFFSET);
         state.addInstruction(jumpInstruction);
-        this.endIndex = state.size() - 1;
+        this.endIndex = state.getNextIndex() - 1;
     }
 
     @Override

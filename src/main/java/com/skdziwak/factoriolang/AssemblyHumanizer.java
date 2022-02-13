@@ -11,7 +11,7 @@ public final class AssemblyHumanizer {
     public static String humanizeCompilationState(CompilationState compilationState) {
         StringBuilder result = new StringBuilder();
 
-        result.append("Program length: ").append(compilationState.size()).append("\n");
+        result.append("Program length: ").append(compilationState.getNextIndex()).append("\n");
         result.append("Instructions: ").append("\n");
         int i = 1;
         for (Instruction instruction : compilationState.getInstructions()) {

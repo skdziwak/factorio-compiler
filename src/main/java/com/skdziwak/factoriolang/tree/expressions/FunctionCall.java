@@ -45,7 +45,7 @@ public class FunctionCall extends Expression {
             state.copyRegister(1, HardwareConstants.FUNCTION_ARG_REGISTERS[i]);
         }
 
-        int jumpStateIndex = state.size() + 2;
+        int jumpStateIndex = state.getNextIndex() + 2;
         state.addInstruction(new Instruction(InstructionType.SET_REGISTER, 1).setSignalC(() -> jumpStateIndex - function.getEndIndex()));
         state.pushReg(1);
 

@@ -22,17 +22,17 @@ public class IfElseStatement extends Statement {
         condition.compile(state);
         state.popReg(1);
 
-        int ifIndex = state.size();
+        int ifIndex = state.getNextIndex();
         Instruction ifInstruction = new Instruction(InstructionType.CONDITIONAL_JUMP_CONSTANT_OFFSET);
         Instruction ifEscapeInstruction = new Instruction(InstructionType.JUMP_CONSTANT_OFFSET);
 
         state.addInstruction(ifInstruction);
         positive.compile(state);
-        int ifEscapeIndex = state.size();
+        int ifEscapeIndex = state.getNextIndex();
         state.addInstruction(ifEscapeInstruction);
-        int negativeIndex = state.size();
+        int negativeIndex = state.getNextIndex();
         negative.compile(state);
-        int endIndex = state.size();
+        int endIndex = state.getNextIndex();
 
         ifInstruction.setSignalB(negativeIndex - ifIndex - 1);
         ifEscapeInstruction.setSignalB(endIndex - ifEscapeIndex - 1);
