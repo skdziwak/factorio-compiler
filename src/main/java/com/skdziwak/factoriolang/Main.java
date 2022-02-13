@@ -17,6 +17,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 public class Main {
+    private static final int DEFAULT_SIMULATION_LENGTH_LIMIT = 10_000;
 
     public static void main(String[] args) {
         Options options = new Options();
@@ -25,6 +26,7 @@ public class Main {
         options.addOption("b", false, "Compile to blueprint");
         options.addOption("h", false, "Compile to humanized assembly");
         options.addOption("sim", false, "Compile and simulate");
+        options.addOption("sl", true, "Simulation length limit (default: " + DEFAULT_SIMULATION_LENGTH_LIMIT + ")");
         options.addOption("no", false, "No optimisations");
         options.addOption("o", true, "Output file");
 
@@ -72,7 +74,11 @@ public class Main {
                 output += "\n\nExecution log:\n";
 
                 HardwareSimulator simulator = new HardwareSimulator();
-                output += simulator.simulate(compilationState.getInstructions());
+                if (parse.hasOption("sl")) {
+                    output += simulator.simulate(compilationState.getInstructions(), Integer.parseInt(parse.getOptionValue("sl")));
+                } else {
+                    output += simulator.simulate(compilationState.getInstructions(), DEFAULT_SIMULATION_LENGTH_LIMIT);
+                }
             } else if (parse.hasOption("s")) {
                 output = compilationState.getStatesString();
             } else if (parse.hasOption("b")) {

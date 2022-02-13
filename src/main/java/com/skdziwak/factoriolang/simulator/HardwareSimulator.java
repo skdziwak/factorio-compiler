@@ -15,10 +15,15 @@ public class HardwareSimulator {
     private final int[] ram = new int[HardwareConstants.RAM_SIZE];
     private int currentIndex = 0;
 
-    public String simulate(List<Instruction> instructionList) {
+    public String simulate(List<Instruction> instructionList, int limit) {
         StringBuilder stringBuilder = new StringBuilder();
         int len = instructionList.size();
+        int i = 0;
         while (currentIndex < len) {
+            if (i == limit) {
+                stringBuilder.append("Simulation length limit exceeded.");
+                return stringBuilder.toString();
+            }
             int displayedIndex = currentIndex + 1;
             stringBuilder.append("\t[").append(displayedIndex).append("] ");
             if (displayedIndex < 100) stringBuilder.append(" ");
@@ -27,6 +32,7 @@ public class HardwareSimulator {
                     .append("\n");
             simulate(instructionList.get(currentIndex));
             currentIndex++;
+            i++;
         }
         return stringBuilder.toString();
     }
