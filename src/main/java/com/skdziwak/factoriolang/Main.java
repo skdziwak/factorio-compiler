@@ -59,7 +59,9 @@ public class Main {
             }
 
             Program program = ProgramParser.parseProgram(sourceCode.toString());
+            program.preCompile(compilationState);
             program.compile(compilationState);
+            program.postCompile(compilationState);
 
             String output = null;
 
