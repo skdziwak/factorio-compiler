@@ -34,7 +34,17 @@ public class HardwareSimulator {
             currentIndex++;
             i++;
         }
+        stringBuilder.append("\nRegister values: \n");
+        arrayToString(stringBuilder, registers);
+        stringBuilder.append("\nRAM values: \n");
+        arrayToString(stringBuilder, ram);
         return stringBuilder.toString();
+    }
+
+    private void arrayToString(StringBuilder stringBuilder, int[] arr) {
+        for (int i = 0 ; i < arr.length ; i++) {
+            stringBuilder.append("\t").append(i + 1).append(": ").append(arr[i]).append("\n");
+        }
     }
 
     private void simulate(Instruction instruction) {
