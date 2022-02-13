@@ -21,20 +21,20 @@ public class IfElseStatement extends Statement {
         state.popReg(1);
 
         int ifIndex = state.size();
-        CompilationState.State ifState = new CompilationState.State();
-        ifState.signalA = 8;
+        CompilationState.Instruction ifInstruction = new CompilationState.Instruction();
+        ifInstruction.signalA = 8;
 
-        CompilationState.State ifEscapeState = new CompilationState.State();
-        ifEscapeState.signalA = 7;
+        CompilationState.Instruction ifEscapeInstruction = new CompilationState.Instruction();
+        ifEscapeInstruction.signalA = 7;
 
-        state.addState(ifState);
+        state.addState(ifInstruction);
         positive.compile(state);
         int ifEscapeIndex = state.size();
-        state.addState(ifEscapeState);
+        state.addState(ifEscapeInstruction);
         negative.compile(state);
         int endIndex = state.size();
 
-        ifState.signalB = endIndex - ifIndex - 1;
-        ifEscapeState.signalB = endIndex - ifEscapeIndex - 1;
+        ifInstruction.signalB = endIndex - ifIndex - 1;
+        ifEscapeInstruction.signalB = endIndex - ifEscapeIndex - 1;
     }
 }

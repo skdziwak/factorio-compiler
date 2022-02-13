@@ -10,7 +10,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class CompilationState {
-    private final List<State> program = new ArrayList<>();
+    private final List<Instruction> instructions = new ArrayList<>();
     private final Map<String, Integer> variableAddresses = new HashMap<>();
     private int nextFreeMemoryAddress = 1;
     private final Map<String, Function> functions = new HashMap<>();
@@ -23,77 +23,77 @@ public class CompilationState {
 
     public void copyRegister(int reg1, int reg2) {
         if (reg1 != reg2 || !optimize) {
-            State state = new State();
-            state.signalA = FactorioConstants.COPY_REG_TO_REG;
-            state.signalB = reg1;
-            state.signalC = reg2;
-            program.add(state);
+            Instruction instruction = new Instruction();
+            instruction.signalA = FactorioConstants.COPY_REG_TO_REG;
+            instruction.signalB = reg1;
+            instruction.signalC = reg2;
+            instructions.add(instruction);
         }
     }
 
     public void math(Operator operator) {
-        State state = new State();
-        state.signalA = FactorioConstants.MATH;
-        state.signalB = operator.sig;
-        program.add(state);
+        Instruction instruction = new Instruction();
+        instruction.signalA = FactorioConstants.MATH;
+        instruction.signalB = operator.sig;
+        instructions.add(instruction);
     }
 
     public void setRegister(int reg, int value) {
-        State state = new State();
-        state.signalS = reg;
-        state.signalI = value;
-        program.add(state);
+        Instruction instruction = new Instruction();
+        instruction.signalS = reg;
+        instruction.signalI = value;
+        instructions.add(instruction);
     }
 
     public void pushReg(int reg) {
-        State state = new State();
-        state.signalA = FactorioConstants.PUSH_REG_TO_STACK;
-        state.signalB = reg;
-        program.add(state);
+        Instruction instruction = new Instruction();
+        instruction.signalA = FactorioConstants.PUSH_REG_TO_STACK;
+        instruction.signalB = reg;
+        instructions.add(instruction);
     }
 
     public void popReg(int reg) {
-        State lastState = program.get(program.size() - 1);
-        if (lastState.signalA == FactorioConstants.PUSH_REG_TO_STACK && lastState.signalB == reg && optimize) {
-            program.remove(program.size() - 1);
+        Instruction lastInstruction = instructions.get(instructions.size() - 1);
+        if (lastInstruction.signalA == FactorioConstants.PUSH_REG_TO_STACK && lastInstruction.signalB == reg && optimize) {
+            instructions.remove(instructions.size() - 1);
         } else {
-            State state = new State();
-            state.signalA = FactorioConstants.POP_STACK_TO_REG;
-            state.signalB = reg;
-            program.add(state);
+            Instruction instruction = new Instruction();
+            instruction.signalA = FactorioConstants.POP_STACK_TO_REG;
+            instruction.signalB = reg;
+            instructions.add(instruction);
         }
     }
 
     public void copyRegisterToRAM(int reg, int ram) {
-        State state = new State();
-        state.signalA = FactorioConstants.COPY_REG_TO_RAM;
-        state.signalB = reg;
-        state.signalC = ram;
-        program.add(state);
+        Instruction instruction = new Instruction();
+        instruction.signalA = FactorioConstants.COPY_REG_TO_RAM;
+        instruction.signalB = reg;
+        instruction.signalC = ram;
+        instructions.add(instruction);
     }
 
     public void copyRAMtoRegister(int ram, int reg) {
-        State state = new State();
-        state.signalA = FactorioConstants.COPY_RAM_TO_REG;
-        state.signalB = ram;
-        state.signalC = reg;
-        program.add(state);
+        Instruction instruction = new Instruction();
+        instruction.signalA = FactorioConstants.COPY_RAM_TO_REG;
+        instruction.signalB = ram;
+        instruction.signalC = reg;
+        instructions.add(instruction);
     }
 
     public void copyInput(int in, int reg) {
-        State state = new State();
-        state.signalA = FactorioConstants.COPY_INPUT_TO_REG;
-        state.signalB = in;
-        state.signalC = reg;
-        program.add(state);
+        Instruction instruction = new Instruction();
+        instruction.signalA = FactorioConstants.COPY_INPUT_TO_REG;
+        instruction.signalB = in;
+        instruction.signalC = reg;
+        instructions.add(instruction);
     }
 
     public void copyOutput(int reg, int out) {
-        State state = new State();
-        state.signalA = FactorioConstants.COPY_REG_TO_OUTPUT;
-        state.signalB = reg;
-        state.signalC = out;
-        program.add(state);
+        Instruction instruction = new Instruction();
+        instruction.signalA = FactorioConstants.COPY_REG_TO_OUTPUT;
+        instruction.signalB = reg;
+        instruction.signalC = out;
+        instructions.add(instruction);
     }
 
     public void addFunction(Function function) {
@@ -122,20 +122,20 @@ public class CompilationState {
         }
     }
 
-    public void addState(State state) {
-        this.program.add(state);
+    public void addState(Instruction instruction) {
+        this.instructions.add(instruction);
     }
 
     public String getStatesString() {
-        return this.program.stream().map(String::valueOf).collect(Collectors.joining("\n"));
+        return this.instructions.stream().map(String::valueOf).collect(Collectors.joining("\n"));
     }
 
     public int size() {
-        return this.program.size();
+        return this.instructions.size();
     }
 
-    public List<State> getProgram() {
-        return program;
+    public List<Instruction> getInstructions() {
+        return instructions;
     }
 
     public FunctionContext getFunctionContext() {
@@ -146,7 +146,7 @@ public class CompilationState {
         this.functionContext = functionContext;
     }
 
-    public static class State {
+    public static class Instruction {
         public int signalA = 0;
         public int signalB = 0;
         public int signalC = 0;

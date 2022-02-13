@@ -22,7 +22,7 @@ public class Program implements Compilable {
 
     @Override
     public void compile(CompilationState state) {
-        CompilationState.State initialJump = new CompilationState.State();
+        CompilationState.Instruction initialJump = new CompilationState.Instruction();
         initialJump.signalA = FactorioConstants.JUMP_CONSTANT_OFFSET;
         state.addState(initialJump);
         this.functions.forEach(function -> function.compile(state));

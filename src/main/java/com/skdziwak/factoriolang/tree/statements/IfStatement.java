@@ -20,12 +20,12 @@ public class IfStatement extends Statement {
         state.popReg(1);
 
         int jumpIndex = state.size();
-        CompilationState.State jumpState = new CompilationState.State();
-        jumpState.signalA = 8;
-        state.addState(jumpState);
+        CompilationState.Instruction jumpInstruction = new CompilationState.Instruction();
+        jumpInstruction.signalA = 8;
+        state.addState(jumpInstruction);
 
         statement.compile(state);
         int endIndex = state.size();
-        jumpState.signalB = endIndex - jumpIndex - 1;
+        jumpInstruction.signalB = endIndex - jumpIndex - 1;
     }
 }

@@ -10,7 +10,6 @@ import com.skdziwak.factoriolang.tree.functions.Function;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.IntStream;
 
 public class FunctionCall extends Expression {
 
@@ -48,10 +47,10 @@ public class FunctionCall extends Expression {
         state.setRegister(1, jumpStateIndex - function.getEndIndex());
         state.pushReg(1);
 
-        CompilationState.State jumpState = new CompilationState.State();
-        jumpState.signalA = FactorioConstants.JUMP_CONSTANT_OFFSET;
-        jumpState.signalB = function.getStartIndex() - jumpStateIndex - 1;
-        state.addState(jumpState);
+        CompilationState.Instruction jumpInstruction = new CompilationState.Instruction();
+        jumpInstruction.signalA = FactorioConstants.JUMP_CONSTANT_OFFSET;
+        jumpInstruction.signalB = function.getStartIndex() - jumpStateIndex - 1;
+        state.addState(jumpInstruction);
 
         if (functionContext != null) {
             Arrays.stream(FactorioConstants.FUNCTION_ARG_REGISTERS, 0, functionContext.numberOfVariables()).boxed().sorted(Collections.reverseOrder()).forEach(state::popReg);

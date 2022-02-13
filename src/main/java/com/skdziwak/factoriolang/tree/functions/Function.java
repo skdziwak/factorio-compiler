@@ -66,9 +66,9 @@ public class Function implements Compilable {
 
         state.setFunctionContext(null);
         state.popReg(8);
-        CompilationState.State jumpState = new CompilationState.State();
-        jumpState.signalA = FactorioConstants.JUMP_DYNAMIC_OFFSET;
-        state.addState(jumpState);
+        CompilationState.Instruction jumpInstruction = new CompilationState.Instruction();
+        jumpInstruction.signalA = FactorioConstants.JUMP_DYNAMIC_OFFSET;
+        state.addState(jumpInstruction);
         state.addFunction(this);
         this.endIndex = state.size() - 1;
     }

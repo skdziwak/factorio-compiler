@@ -20,19 +20,19 @@ public class WhileStatement extends Statement {
         state.popReg(1);
 
         int escapeStateIndex = state.size();
-        CompilationState.State escapeState = new CompilationState.State();
-        escapeState.signalA = 8;
-        state.addState(escapeState);
+        CompilationState.Instruction escapeInstruction = new CompilationState.Instruction();
+        escapeInstruction.signalA = 8;
+        state.addState(escapeInstruction);
 
         statement.compile(state);
 
         int loopIndex = state.size();
-        CompilationState.State loopState = new CompilationState.State();
-        loopState.signalA = 7;
-        state.addState(loopState);
+        CompilationState.Instruction loopInstruction = new CompilationState.Instruction();
+        loopInstruction.signalA = 7;
+        state.addState(loopInstruction);
         int endIndex = state.size();
 
-        escapeState.signalB = endIndex - escapeStateIndex - 1;
-        loopState.signalB = startIndex - loopIndex - 1;
+        escapeInstruction.signalB = endIndex - escapeStateIndex - 1;
+        loopInstruction.signalB = startIndex - loopIndex - 1;
     }
 }

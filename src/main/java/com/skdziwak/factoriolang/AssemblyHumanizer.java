@@ -11,42 +11,42 @@ public final class AssemblyHumanizer {
         result.append("Program length: ").append(compilationState.size()).append("\n");
         result.append("Instructions: ").append("\n");
         int i = 1;
-        for (CompilationState.State state : compilationState.getProgram()) {
+        for (CompilationState.Instruction instruction : compilationState.getInstructions()) {
             result.append("\t[").append(i).append("] ");
             if (i < 100) result.append(" ");
             if (i < 10) result.append(" ");
-            result.append(humanizeState(state, i)).append("\n");
+            result.append(humanizeState(instruction, i)).append("\n");
             i++;
         }
 
         return result.toString();
     }
 
-    private static String humanizeState(CompilationState.State state, int index) {
-        switch (state.signalA) {
+    private static String humanizeState(CompilationState.Instruction instruction, int index) {
+        switch (instruction.signalA) {
             case 1:
-                return "Copy register " + state.signalB + " to register " + state.signalC;
+                return "Copy register " + instruction.signalB + " to register " + instruction.signalC;
             case 2:
-                return "Math operation: (register 1) <- (register 1) " + humanizeOperation(state.signalB) + " (register 2)";
+                return "Math operation: (register 1) <- (register 1) " + humanizeOperation(instruction.signalB) + " (register 2)";
             case 3:
-                return "Push register " + state.signalB + " to stack";
+                return "Push register " + instruction.signalB + " to stack";
             case 4:
-                return "Pop stack to register " + state.signalB;
+                return "Pop stack to register " + instruction.signalB;
             case 5:
-                return "Copy register " + state.signalB + " to RAM(" + state.signalC + ")";
+                return "Copy register " + instruction.signalB + " to RAM(" + instruction.signalC + ")";
             case 6:
-                return "Copy RAM(" + state.signalB + ") to register " + state.signalC;
+                return "Copy RAM(" + instruction.signalB + ") to register " + instruction.signalC;
             case 7:
-                return "Jump to " + (index + state.signalB + 1);
+                return "Jump to " + (index + instruction.signalB + 1);
             case 8:
-                return "Jump to " + (index + state.signalB + 1) + " if register 1 is equal to 0";
+                return "Jump to " + (index + instruction.signalB + 1) + " if register 1 is equal to 0";
             case 9:
                 return "Jump with dynamic offset from register 8";
             case 10:
                 return "Jump with dynamic offset from register 8 if register 1 is equal to 0";
         }
-        if (state.signalS != 0) {
-            return "Assign value " + state.signalI + " to register " + state.signalS;
+        if (instruction.signalS != 0) {
+            return "Assign value " + instruction.signalI + " to register " + instruction.signalS;
         }
         return "[UNKNOWN OPERATION]";
     }
