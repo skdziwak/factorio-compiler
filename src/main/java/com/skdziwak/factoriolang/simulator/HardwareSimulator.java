@@ -122,12 +122,12 @@ public class HardwareSimulator {
 
     private void setRegister(int index, int value) {
         validateRegisterIndex(index);
-        this.registers[index] = value;
+        this.registers[index - 1] = value;
     }
 
     private int getRegister(int index) {
         validateRegisterIndex(index);
-        return this.registers[index];
+        return this.registers[index - 1];
     }
 
     private int popStack() {
