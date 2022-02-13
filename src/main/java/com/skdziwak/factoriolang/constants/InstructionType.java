@@ -1,5 +1,7 @@
 package com.skdziwak.factoriolang.constants;
 
+import java.util.Arrays;
+
 public enum InstructionType {
     COPY_REG_TO_REG(1),
     MATH(2),
@@ -23,5 +25,10 @@ public enum InstructionType {
 
     public int getSignal() {
         return signal;
+    }
+
+    public static InstructionType bySignal(int signal) {
+        return Arrays.stream(InstructionType.values()).filter(t -> t.signal == signal).findFirst()
+                .orElseThrow(() -> new RuntimeException("Invalid InstructionType"));
     }
 }
