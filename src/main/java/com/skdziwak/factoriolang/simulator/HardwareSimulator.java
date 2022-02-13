@@ -8,6 +8,7 @@ import com.skdziwak.factoriolang.constants.MathOperator;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class HardwareSimulator {
     private final int[] registers = new int[HardwareConstants.REGISTERS_COUNT];
@@ -33,6 +34,10 @@ public class HardwareSimulator {
             simulate(instructionList.get(currentIndex));
             currentIndex++;
             i++;
+        }
+        if (!this.stack.isEmpty()) {
+            stringBuilder.append("\nStack values: ");
+            stringBuilder.append(this.stack.stream().map(String::valueOf).collect(Collectors.joining(", "))).append("\n");
         }
         stringBuilder.append("\nRegister values: \n");
         arrayToString(stringBuilder, registers);
