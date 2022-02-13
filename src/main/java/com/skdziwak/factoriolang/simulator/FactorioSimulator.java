@@ -7,9 +7,9 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class FactorioSimulator {
-    private int[] registers = new int[FactorioConstants.REGISTERS_COUNT];
-    private LinkedList<Integer> stack = new LinkedList<>();
-    private int[] ram = new int[FactorioConstants.RAM_SIZE];
+    private final int[] registers = new int[FactorioConstants.REGISTERS_COUNT];
+    private final LinkedList<Integer> stack = new LinkedList<>();
+    private final int[] ram = new int[FactorioConstants.RAM_SIZE];
     private int currentIndex = 0;
 
     public void simulate(List<Instruction> instructionList) {
