@@ -1,5 +1,7 @@
 package com.skdziwak.factoriolang.constants;
 
+import java.util.Arrays;
+
 public enum MathOperator {
     ADD(1), SUBTRACT(2), MULTIPLY(3), DIVIDE(4), MODULO(5),
     EQUALS(6), NOT_EQUALS(7), GREATER(8), LOWER(9), GREATER_EQUAL(10), LOWER_EQUAL(11),
@@ -12,5 +14,10 @@ public enum MathOperator {
 
     public int getSignal() {
         return this.sig;
+    }
+
+    public static MathOperator bySignal(int signal) {
+        return Arrays.stream(MathOperator.values()).filter(mo -> mo.sig == signal).findFirst()
+                .orElseThrow(() -> new RuntimeException("Invalid math operator"));
     }
 }

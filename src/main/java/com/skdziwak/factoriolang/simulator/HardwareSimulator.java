@@ -1,7 +1,10 @@
 package com.skdziwak.factoriolang.simulator;
 
+import com.skdziwak.factoriolang.AssemblyHumanizer;
 import com.skdziwak.factoriolang.HardwareConstants;
 import com.skdziwak.factoriolang.compilation.Instruction;
+import com.skdziwak.factoriolang.constants.InstructionType;
+import com.skdziwak.factoriolang.constants.MathOperator;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -12,19 +15,67 @@ public class HardwareSimulator {
     private final int[] ram = new int[HardwareConstants.RAM_SIZE];
     private int currentIndex = 0;
 
-    public void simulate(List<Instruction> instructionList) {
+    public String simulate(List<Instruction> instructionList) {
+        StringBuilder stringBuilder = new StringBuilder();
         int len = instructionList.size();
         while (currentIndex < len) {
+            int displayedIndex = currentIndex + 1;
+            stringBuilder.append("\t[").append(displayedIndex).append("] ");
+            if (displayedIndex < 100) stringBuilder.append(" ");
+            if (displayedIndex < 10) stringBuilder.append(" ");
+            stringBuilder.append(AssemblyHumanizer.humanizeState(instructionList.get(currentIndex), displayedIndex))
+                    .append("\n");
             simulate(instructionList.get(currentIndex));
             currentIndex++;
         }
+        return stringBuilder.toString();
     }
 
     private void simulate(Instruction instruction) {
-        int a = instruction.getSignalA();
+        InstructionType instructionType = InstructionType.bySignal(instruction.getSignalA());
         int b = instruction.getSignalB();
         int c = instruction.getSignalC();
 
+        switch (instructionType) {
+            case COPY_REG_TO_REG -> setRegister(c, getRegister(b));
+            case MATH -> setRegister(1, simulateMath(MathOperator.bySignal(b)));
+            case PUSH_REG_TO_STACK -> pushStack(getRegister(b));
+            case POP_STACK_TO_REG -> setRegister(b, popStack());
+            case COPY_REG_TO_RAM -> setRAM(c, getRegister(b));
+            case COPY_RAM_TO_REG -> setRegister(c, getRAM(b));
+            case JUMP_CONSTANT_OFFSET -> this.currentIndex += b;
+            case CONDITIONAL_JUMP_CONSTANT_OFFSET -> {
+                if(getRegister(1) == 0) {
+                    this.currentIndex += b;
+                }
+            }
+            case JUMP_DYNAMIC_OFFSET -> this.currentIndex += getRegister(8);
+            case CONDITIONAL_JUMP_DYNAMIC_OFFSET -> {
+                if(getRegister(1) == 0) {
+                    this.currentIndex += getRegister(8);
+                }
+            }
+            case SET_REGISTER -> setRegister(b, c);
+        }
+    }
+    private int simulateMath(MathOperator operator) {
+        return switch (operator) {
+            case ADD -> getRegister(1) + getRegister(2);
+            case SUBTRACT -> getRegister(1) - getRegister(2);
+            case MULTIPLY -> getRegister(1) * getRegister(2);
+            case DIVIDE -> getRegister(1) / getRegister(2);
+            case MODULO -> getRegister(1) % getRegister(2);
+            case EQUALS -> getRegister(1) == getRegister(2) ? 1 : 0;
+            case NOT_EQUALS -> getRegister(1) != getRegister(2) ? 1 : 0;
+            case GREATER -> getRegister(1) > getRegister(2) ? 1 : 0;
+            case LOWER -> getRegister(1) < getRegister(2) ? 1 : 0;
+            case GREATER_EQUAL -> getRegister(1) >= getRegister(2) ? 1 : 0;
+            case LOWER_EQUAL -> getRegister(1) <= getRegister(2) ? 1 : 0;
+            case SHIFT_LEFT -> getRegister(1) << getRegister(2);
+            case SHIFT_RIGHT -> getRegister(1) >> getRegister(2);
+            case AND -> getRegister(1) & getRegister(2);
+            case OR -> getRegister(1) | getRegister(2);
+        };
     }
 
     private void validateRamIndex(int index) {

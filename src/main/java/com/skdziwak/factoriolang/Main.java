@@ -7,13 +7,13 @@ import com.skdziwak.factoriolang.blueprint.BlueprintEncoder;
 import com.skdziwak.factoriolang.blueprint.CompilationStateToBlueprintConverter;
 import com.skdziwak.factoriolang.compilation.CompilationState;
 import com.skdziwak.factoriolang.parser.ProgramParser;
+import com.skdziwak.factoriolang.simulator.HardwareSimulator;
 import com.skdziwak.factoriolang.tree.Program;
 import org.apache.commons.cli.*;
 import org.apache.commons.io.IOUtils;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Path;
 import java.util.List;
 
 public class Main {
@@ -24,6 +24,7 @@ public class Main {
         options.addOption("j", false, "Compile to json");
         options.addOption("b", false, "Compile to blueprint");
         options.addOption("h", false, "Compile to humanized assembly");
+        options.addOption("sim", false, "Compile and simulate");
         options.addOption("no", false, "No optimisations");
         options.addOption("o", true, "Output file");
 
@@ -65,7 +66,14 @@ public class Main {
 
             String output = null;
 
-            if (parse.hasOption("s")) {
+            if (parse.hasOption("sim")) {
+                output = "Program:\n";
+                output += AssemblyHumanizer.humanizeCompilationState(compilationState);
+                output += "\n\nExecution log:\n";
+
+                HardwareSimulator simulator = new HardwareSimulator();
+                output += simulator.simulate(compilationState.getInstructions());
+            } else if (parse.hasOption("s")) {
                 output = compilationState.getStatesString();
             } else if (parse.hasOption("b")) {
                 Blueprint blueprint = CompilationStateToBlueprintConverter.convert(compilationState);

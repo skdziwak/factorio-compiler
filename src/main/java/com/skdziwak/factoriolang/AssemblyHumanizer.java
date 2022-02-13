@@ -24,7 +24,7 @@ public final class AssemblyHumanizer {
         return result.toString();
     }
 
-    private static String humanizeState(Instruction instruction, int index) {
+    public static String humanizeState(Instruction instruction, int index) {
         return switch (instruction.getSignalA()) {
             case 1 -> "Copy register " + instruction.getSignalB() + " to register " + instruction.getSignalC();
             case 2 -> "Math operation: (register 1) <- (register 1) " + humanizeOperation(instruction.getSignalB()) + " (register 2)";
