@@ -14,7 +14,8 @@ public final class FactorioConstants {
             JUMP_DYNAMIC_OFFSET = 9,
             CONDITIONAL_JUMP_DYNAMIC_OFFSET = 10,
             COPY_INPUT_TO_REG = 11,
-            COPY_REG_TO_OUTPUT = 12;
+            COPY_REG_TO_OUTPUT = 12,
+            SET_REGISTER = 13;
 
     // MATH
     public static final int

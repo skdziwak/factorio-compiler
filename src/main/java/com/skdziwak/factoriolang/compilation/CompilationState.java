@@ -23,76 +23,53 @@ public class CompilationState {
 
     public void copyRegister(int reg1, int reg2) {
         if (reg1 != reg2 || !optimize) {
-            Instruction instruction = new Instruction();
-            instruction.signalA = FactorioConstants.COPY_REG_TO_REG;
-            instruction.signalB = reg1;
-            instruction.signalC = reg2;
+            Instruction instruction = new Instruction(FactorioConstants.COPY_REG_TO_REG, reg1, reg1);
             instructions.add(instruction);
         }
     }
 
     public void math(Operator operator) {
-        Instruction instruction = new Instruction();
-        instruction.signalA = FactorioConstants.MATH;
-        instruction.signalB = operator.sig;
+        Instruction instruction = new Instruction(FactorioConstants.MATH, operator.sig);
         instructions.add(instruction);
     }
 
     public void setRegister(int reg, int value) {
-        Instruction instruction = new Instruction();
-        instruction.signalS = reg;
-        instruction.signalI = value;
+        Instruction instruction = new Instruction(FactorioConstants.SET_REGISTER, reg, value);
         instructions.add(instruction);
     }
 
     public void pushReg(int reg) {
-        Instruction instruction = new Instruction();
-        instruction.signalA = FactorioConstants.PUSH_REG_TO_STACK;
-        instruction.signalB = reg;
+        Instruction instruction = new Instruction(FactorioConstants.PUSH_REG_TO_STACK, reg);
         instructions.add(instruction);
     }
 
     public void popReg(int reg) {
         Instruction lastInstruction = instructions.get(instructions.size() - 1);
-        if (lastInstruction.signalA == FactorioConstants.PUSH_REG_TO_STACK && lastInstruction.signalB == reg && optimize) {
+        if (lastInstruction.getSignalA() == FactorioConstants.PUSH_REG_TO_STACK && lastInstruction.getSignalB() == reg && optimize) {
             instructions.remove(instructions.size() - 1);
         } else {
-            Instruction instruction = new Instruction();
-            instruction.signalA = FactorioConstants.POP_STACK_TO_REG;
-            instruction.signalB = reg;
+            Instruction instruction = new Instruction(FactorioConstants.POP_STACK_TO_REG, reg);
             instructions.add(instruction);
         }
     }
 
     public void copyRegisterToRAM(int reg, int ram) {
-        Instruction instruction = new Instruction();
-        instruction.signalA = FactorioConstants.COPY_REG_TO_RAM;
-        instruction.signalB = reg;
-        instruction.signalC = ram;
+        Instruction instruction = new Instruction(FactorioConstants.COPY_REG_TO_RAM, reg, ram);
         instructions.add(instruction);
     }
 
     public void copyRAMtoRegister(int ram, int reg) {
-        Instruction instruction = new Instruction();
-        instruction.signalA = FactorioConstants.COPY_RAM_TO_REG;
-        instruction.signalB = ram;
-        instruction.signalC = reg;
+        Instruction instruction = new Instruction(FactorioConstants.COPY_RAM_TO_REG, ram, reg);
         instructions.add(instruction);
     }
 
     public void copyInput(int in, int reg) {
-        Instruction instruction = new Instruction();
-        instruction.signalA = FactorioConstants.COPY_INPUT_TO_REG;
-        instruction.signalB = in;
-        instruction.signalC = reg;
+        Instruction instruction = new Instruction(FactorioConstants.COPY_INPUT_TO_REG, in, reg);
         instructions.add(instruction);
     }
 
     public void copyOutput(int reg, int out) {
-        Instruction instruction = new Instruction();
-        instruction.signalA = FactorioConstants.COPY_REG_TO_OUTPUT;
-        instruction.signalB = reg;
-        instruction.signalC = out;
+        Instruction instruction = new Instruction(FactorioConstants.COPY_REG_TO_OUTPUT, reg, out);
         instructions.add(instruction);
     }
 
@@ -144,35 +121,6 @@ public class CompilationState {
 
     public void setFunctionContext(FunctionContext functionContext) {
         this.functionContext = functionContext;
-    }
-
-    public static class Instruction {
-        public int signalA = 0;
-        public int signalB = 0;
-        public int signalC = 0;
-        public int signalS = 0;
-        public int signalI = 0;
-
-        @Override
-        public String toString() {
-            return "State{" +
-                    "signalA=" + signalA +
-                    ", signalB=" + signalB +
-                    ", signalC=" + signalC +
-                    ", signalS=" + signalS +
-                    ", signalI=" + signalI +
-                    '}';
-        }
-
-        public Map<String, Integer> toMap() {
-            Map<String, Integer> map = new HashMap<>();
-            if (signalA != 0) map.put("signal-A", signalA);
-            if (signalB != 0) map.put("signal-B", signalB);
-            if (signalC != 0) map.put("signal-C", signalC);
-            if (signalS != 0) map.put("signal-S", signalS);
-            if (signalI != 0) map.put("signal-I", signalI);
-            return map;
-        }
     }
 
     public enum Operator {

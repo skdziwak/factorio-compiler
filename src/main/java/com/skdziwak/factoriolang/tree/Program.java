@@ -3,6 +3,7 @@ package com.skdziwak.factoriolang.tree;
 import com.skdziwak.factoriolang.FactorioConstants;
 import com.skdziwak.factoriolang.compilation.Compilable;
 import com.skdziwak.factoriolang.compilation.CompilationState;
+import com.skdziwak.factoriolang.compilation.Instruction;
 import com.skdziwak.factoriolang.tree.functions.Function;
 
 import java.util.ArrayList;
@@ -22,11 +23,10 @@ public class Program implements Compilable {
 
     @Override
     public void compile(CompilationState state) {
-        CompilationState.Instruction initialJump = new CompilationState.Instruction();
-        initialJump.signalA = FactorioConstants.JUMP_CONSTANT_OFFSET;
+        Instruction initialJump = new Instruction(FactorioConstants.JUMP_CONSTANT_OFFSET);
         state.addState(initialJump);
         this.functions.forEach(function -> function.compile(state));
-        initialJump.signalB = state.size() - 1;
+        initialJump.setSignalB(state.size() - 1);
         this.statements.forEach(statement -> statement.compile(state));
     }
 }

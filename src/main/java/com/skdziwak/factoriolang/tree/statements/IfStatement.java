@@ -1,6 +1,8 @@
 package com.skdziwak.factoriolang.tree.statements;
 
+import com.skdziwak.factoriolang.FactorioConstants;
 import com.skdziwak.factoriolang.compilation.CompilationState;
+import com.skdziwak.factoriolang.compilation.Instruction;
 import com.skdziwak.factoriolang.tree.Expression;
 import com.skdziwak.factoriolang.tree.Statement;
 
@@ -20,12 +22,11 @@ public class IfStatement extends Statement {
         state.popReg(1);
 
         int jumpIndex = state.size();
-        CompilationState.Instruction jumpInstruction = new CompilationState.Instruction();
-        jumpInstruction.signalA = 8;
+        Instruction jumpInstruction = new Instruction(FactorioConstants.CONDITIONAL_JUMP_CONSTANT_OFFSET);
         state.addState(jumpInstruction);
 
         statement.compile(state);
         int endIndex = state.size();
-        jumpInstruction.signalB = endIndex - jumpIndex - 1;
+        jumpInstruction.setSignalB(endIndex - jumpIndex - 1);
     }
 }

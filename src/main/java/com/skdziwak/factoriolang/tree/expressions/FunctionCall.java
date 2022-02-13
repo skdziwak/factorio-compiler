@@ -4,6 +4,7 @@ import com.skdziwak.factoriolang.FactorioConstants;
 import com.skdziwak.factoriolang.compilation.CompilationException;
 import com.skdziwak.factoriolang.compilation.CompilationState;
 import com.skdziwak.factoriolang.compilation.FunctionContext;
+import com.skdziwak.factoriolang.compilation.Instruction;
 import com.skdziwak.factoriolang.tree.Expression;
 import com.skdziwak.factoriolang.tree.functions.Function;
 
@@ -47,9 +48,8 @@ public class FunctionCall extends Expression {
         state.setRegister(1, jumpStateIndex - function.getEndIndex());
         state.pushReg(1);
 
-        CompilationState.Instruction jumpInstruction = new CompilationState.Instruction();
-        jumpInstruction.signalA = FactorioConstants.JUMP_CONSTANT_OFFSET;
-        jumpInstruction.signalB = function.getStartIndex() - jumpStateIndex - 1;
+        Instruction jumpInstruction = new Instruction(FactorioConstants.JUMP_CONSTANT_OFFSET,
+                function.getStartIndex() - jumpStateIndex - 1);
         state.addState(jumpInstruction);
 
         if (functionContext != null) {

@@ -1,10 +1,7 @@
 package com.skdziwak.factoriolang.tree.functions;
 
 import com.skdziwak.factoriolang.FactorioConstants;
-import com.skdziwak.factoriolang.compilation.Compilable;
-import com.skdziwak.factoriolang.compilation.CompilationException;
-import com.skdziwak.factoriolang.compilation.CompilationState;
-import com.skdziwak.factoriolang.compilation.FunctionContext;
+import com.skdziwak.factoriolang.compilation.*;
 import com.skdziwak.factoriolang.tree.Statement;
 
 import java.util.List;
@@ -66,8 +63,7 @@ public class Function implements Compilable {
 
         state.setFunctionContext(null);
         state.popReg(8);
-        CompilationState.Instruction jumpInstruction = new CompilationState.Instruction();
-        jumpInstruction.signalA = FactorioConstants.JUMP_DYNAMIC_OFFSET;
+        Instruction jumpInstruction = new Instruction(FactorioConstants.JUMP_DYNAMIC_OFFSET);
         state.addState(jumpInstruction);
         state.addFunction(this);
         this.endIndex = state.size() - 1;

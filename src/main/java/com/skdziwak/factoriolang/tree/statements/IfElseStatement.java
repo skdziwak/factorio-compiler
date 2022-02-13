@@ -1,6 +1,8 @@
 package com.skdziwak.factoriolang.tree.statements;
 
+import com.skdziwak.factoriolang.FactorioConstants;
 import com.skdziwak.factoriolang.compilation.CompilationState;
+import com.skdziwak.factoriolang.compilation.Instruction;
 import com.skdziwak.factoriolang.tree.Expression;
 import com.skdziwak.factoriolang.tree.Statement;
 
@@ -21,11 +23,8 @@ public class IfElseStatement extends Statement {
         state.popReg(1);
 
         int ifIndex = state.size();
-        CompilationState.Instruction ifInstruction = new CompilationState.Instruction();
-        ifInstruction.signalA = 8;
-
-        CompilationState.Instruction ifEscapeInstruction = new CompilationState.Instruction();
-        ifEscapeInstruction.signalA = 7;
+        Instruction ifInstruction = new Instruction(FactorioConstants.CONDITIONAL_JUMP_CONSTANT_OFFSET);
+        Instruction ifEscapeInstruction = new Instruction(FactorioConstants.JUMP_CONSTANT_OFFSET);
 
         state.addState(ifInstruction);
         positive.compile(state);
@@ -34,7 +33,7 @@ public class IfElseStatement extends Statement {
         negative.compile(state);
         int endIndex = state.size();
 
-        ifInstruction.signalB = endIndex - ifIndex - 1;
-        ifEscapeInstruction.signalB = endIndex - ifEscapeIndex - 1;
+        ifInstruction.setSignalB(endIndex - ifIndex - 1);
+        ifEscapeInstruction.setSignalB(endIndex - ifEscapeIndex - 1);
     }
 }

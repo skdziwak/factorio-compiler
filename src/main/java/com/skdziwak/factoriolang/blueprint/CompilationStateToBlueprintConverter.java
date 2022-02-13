@@ -2,6 +2,7 @@ package com.skdziwak.factoriolang.blueprint;
 
 import com.skdziwak.factoriolang.blueprint.components.*;
 import com.skdziwak.factoriolang.compilation.CompilationState;
+import com.skdziwak.factoriolang.compilation.Instruction;
 import lombok.Getter;
 
 import java.util.List;
@@ -16,7 +17,7 @@ public class CompilationStateToBlueprintConverter {
 
         int x = 1;
         Block lastBlock = null;
-        for (CompilationState.Instruction instruction : compilationState.getInstructions()) {
+        for (Instruction instruction : compilationState.getInstructions()) {
             Block block = new Block(blueprint, instruction, x++);
             block.addToBlueprint(blueprint);
 
@@ -36,7 +37,7 @@ public class CompilationStateToBlueprintConverter {
         @Getter
         private final Entity deciderCombinator;
 
-        Block(Blueprint blueprint, CompilationState.Instruction instruction, int x) {
+        Block(Blueprint blueprint, Instruction instruction, int x) {
             Map<String, Integer> signals = instruction.toMap();
             constantCombinator = new Entity(blueprint.nextId(), "constant-combinator");
             constantCombinator.setPosition(new Position((double) x, 1.5));
