@@ -6,3 +6,4 @@ target
 *.fcl
 *.json
 *.txt
+dependency-reduced-pom.xml
