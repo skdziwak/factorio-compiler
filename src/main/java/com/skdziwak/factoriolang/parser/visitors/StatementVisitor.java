@@ -64,11 +64,16 @@ public class StatementVisitor extends LangBaseVisitor<Statement> {
 
     @Override
     public Statement visitPointerAssignmentStatement(LangParser.PointerAssignmentStatementContext ctx) {
-        return new ExpressionStatement(new ConstantExpression(1));
+        return new DereferenceAssignmentStatement(
+                ctx.getChild(1).accept(expressionVisitor),
+                ctx.getChild(3).accept(expressionVisitor));
     }
 
     @Override
     public Statement visitArrayAssignmentStatement(LangParser.ArrayAssignmentStatementContext ctx) {
-        return new ExpressionStatement(new ConstantExpression(1));
+        return new ArrayAssignmentStatement(
+                ctx.getChild(0).getText(),
+                ctx.getChild(2).accept(expressionVisitor),
+                ctx.getChild(5).accept(expressionVisitor));
     }
 }
