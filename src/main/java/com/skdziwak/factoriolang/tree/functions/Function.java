@@ -52,8 +52,7 @@ public class Function implements Compilable, PreCompilable {
         state.setFunctionContext(functionContext);
 
         for (int i = arguments.size() - 1 ; i >= 0 ; i--) {
-            state.popReg(1);
-            state.copyRegister(1, HardwareConstants.FUNCTION_ARG_REGISTERS[i]);
+            state.popReg(HardwareConstants.FUNCTION_ARG_REGISTERS[i]);
         }
 
         statements.forEach(statement -> statement.compile(state));
