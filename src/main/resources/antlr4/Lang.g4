@@ -40,8 +40,8 @@ expr:
     | expr op=('+' | '-') expr                                  # AdditionPrecedenceOperation
     | expr op=('>>' | '<<') expr                                # ShiftOperation
     | expr op=('==' | '!=' | '>' | '<' | '>=' | '<=') expr      # Comparison
-    | expr 'and' expr                                           # AndOperator
-    | expr 'or' expr                                            # OrOperator
+    | expr ('and' | '&') expr                                           # AndOperator
+    | expr ('or' | '|') expr                                            # OrOperator
     | 'input' '[' NUM ']'                                       # Input
     | IDENTIFIER '[' expr ']'                                   # ArrayExpression
     | 'malloc' '(' expr ')'                                     # Malloc
