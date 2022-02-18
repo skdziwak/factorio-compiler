@@ -39,6 +39,15 @@ public class CompilationState {
     }
 
     public void copyRegister(int reg1, int reg2) {
+        if (checkOptimize()) {
+            Instruction lastInstruction = instructions.get(instructions.size() - 1);
+            if (lastInstruction.getSignalA() == InstructionType.COPY_REG_TO_REG.getSignal()) {
+                if (lastInstruction.getSignalB() == reg2 && lastInstruction.getSignalC() == reg1) {
+                    consumeNextOptimisationSkip();
+                    return;
+                }
+            }
+        }
         if (reg1 != reg2 || !checkOptimize()) {
             Instruction instruction = new Instruction(InstructionType.COPY_REG_TO_REG, reg1, reg2);
             addInstruction(instruction);
