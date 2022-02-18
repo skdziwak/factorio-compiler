@@ -77,6 +77,8 @@ public class HardwareSimulator {
                 }
             }
             case SET_REGISTER -> setRegister(b, c);
+            case COPY_REG_TO_RAM_DYNAMICALLY -> setRAM(getRegister(c), getRegister(b));
+            case COPY_RAM_TO_REG_DYNAMICALLY -> setRegister(c, getRAM(getRegister(b)));
         }
     }
     private int simulateMath(MathOperator operator) {
