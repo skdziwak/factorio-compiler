@@ -107,4 +107,19 @@ public class ExpressionVisitor extends LangBaseVisitor<Expression> {
         };
         return new BinaryOperation(left, mathOperator, right);
     }
+
+    @Override
+    public Expression visitMalloc(LangParser.MallocContext ctx) {
+        return new MallocExpression(ctx.getChild(2).accept(this));
+    }
+
+    @Override
+    public Expression visitArrayExpression(LangParser.ArrayExpressionContext ctx) {
+        return new ConstantExpression(1);
+    }
+
+    @Override
+    public Expression visitDereference(LangParser.DereferenceContext ctx) {
+        return new ConstantExpression(1);
+    }
 }

@@ -13,11 +13,18 @@ import java.util.stream.Collectors;
 public class CompilationState {
     private final List<Instruction> instructions = new ArrayList<>();
     private final Map<String, Integer> variableAddresses = new HashMap<>();
-    private int nextFreeMemoryAddress = 1;
+    private int nextFreeMemoryAddress = 2;
     private final Map<String, Function> functions = new HashMap<>();
     private FunctionContext functionContext;
     private boolean optimize = true;
     private boolean skipNextOptimisation = false;
+
+    public CompilationState() {
+        Instruction mallocInitValueSet = new Instruction(InstructionType.SET_REGISTER, 1).setSignalC(() -> this.nextFreeMemoryAddress);
+        Instruction copyMallocInitValueToRam = new Instruction(InstructionType.COPY_REG_TO_RAM, 1, 1);
+        this.instructions.add(mallocInitValueSet);
+        this.instructions.add(copyMallocInitValueToRam);
+    }
 
     public void noOptimisations() {
         this.optimize = false;

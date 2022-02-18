@@ -4,6 +4,7 @@ import com.skdziwak.factoriolang.antlr4.LangBaseVisitor;
 import com.skdziwak.factoriolang.antlr4.LangParser;
 import com.skdziwak.factoriolang.tree.Expression;
 import com.skdziwak.factoriolang.tree.Statement;
+import com.skdziwak.factoriolang.tree.expressions.ConstantExpression;
 import com.skdziwak.factoriolang.tree.statements.*;
 
 import java.util.ArrayList;
@@ -59,5 +60,15 @@ public class StatementVisitor extends LangBaseVisitor<Statement> {
     @Override
     public Statement visitOutputStatement(LangParser.OutputStatementContext ctx) {
         return new OutputStatement(Integer.valueOf(ctx.getChild(2).getText()), ctx.getChild(5).accept(expressionVisitor));
+    }
+
+    @Override
+    public Statement visitPointerAssignmentStatement(LangParser.PointerAssignmentStatementContext ctx) {
+        return new ExpressionStatement(new ConstantExpression(1));
+    }
+
+    @Override
+    public Statement visitArrayAssignmentStatement(LangParser.ArrayAssignmentStatementContext ctx) {
+        return new ExpressionStatement(new ConstantExpression(1));
     }
 }

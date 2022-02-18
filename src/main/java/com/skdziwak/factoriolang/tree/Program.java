@@ -25,10 +25,11 @@ public class Program implements Compilable, PreCompilable, PostCompilable {
 
     @Override
     public void compile(CompilationState state) {
+        int initialSize = state.getNextIndex();
         Instruction initialJump = new Instruction(InstructionType.JUMP_CONSTANT_OFFSET);
         state.addInstruction(initialJump);
         this.functions.forEach(function -> function.compile(state));
-        initialJump.setSignalB(state.getNextIndex() - 1);
+        initialJump.setSignalB(state.getNextIndex() - initialSize - 1);
         this.statements.forEach(statement -> statement.compile(state));
     }
 
