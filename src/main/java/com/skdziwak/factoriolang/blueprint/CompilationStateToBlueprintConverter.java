@@ -16,16 +16,32 @@ public class CompilationStateToBlueprintConverter {
         blueprint.setIcons(List.of(new Icon(new Signal("item", "constant-combinator"), 1)));
 
         int x = 1;
+        Block firstBlock = null;
         Block lastBlock = null;
         for (Instruction instruction : compilationState.getInstructions()) {
             Block block = new Block(blueprint, instruction, x++);
             block.addToBlueprint(blueprint);
 
+            if (firstBlock == null) {
+                firstBlock = block;
+            }
             if (lastBlock != null) {
                 block.connect(lastBlock);
             }
 
             lastBlock = block;
+        }
+
+        if (firstBlock != null) {
+            Entity plug = new Entity(blueprint.nextId(), "constant-combinator");
+            plug.setPosition(new Position(-2.0, 0.0));
+            firstBlock.deciderCombinator.getConnections().connect(Connections.Port.PORT_1, Connections.Cable.RED, plug);
+            plug.getConnections().connect(Connections.Port.PORT_1, Connections.Cable.RED, firstBlock.deciderCombinator, 1);
+
+            firstBlock.deciderCombinator.getConnections().connect(Connections.Port.PORT_2, Connections.Cable.GREEN, plug);
+            plug.getConnections().connect(Connections.Port.PORT_1, Connections.Cable.GREEN, firstBlock.deciderCombinator, 2);
+
+            blueprint.getEntities().add(plug);
         }
 
         return blueprint;
