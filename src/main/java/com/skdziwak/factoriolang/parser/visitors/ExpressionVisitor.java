@@ -101,6 +101,8 @@ public class ExpressionVisitor extends LangBaseVisitor<Expression> {
             case "<" -> MathOperator.LOWER;
             case ">=" -> MathOperator.GREATER_EQUAL;
             case "<=" -> MathOperator.LOWER_EQUAL;
+            case "and" -> MathOperator.AND;
+            case "or" -> MathOperator.OR;
             default -> throw new ParsingException("Invalid operator");
         };
         return new BinaryOperation(left, mathOperator, right);
