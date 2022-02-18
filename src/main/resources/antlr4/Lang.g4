@@ -45,4 +45,4 @@ expr:
 IDENTIFIER: [a-zA-Z][a-zA-Z0-9_]*;
 NUM: '0' | '-'?[1-9][0-9]*(.[0-9]+)?;
 WS: [ \t\n\r]+ -> skip;
-COMMENT: '#'.+ -> skip;
+COMMENT: '#'.+[\n\r] -> skip;
