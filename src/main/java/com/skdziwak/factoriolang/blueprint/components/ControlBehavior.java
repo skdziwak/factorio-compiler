@@ -15,4 +15,8 @@ public class ControlBehavior {
     @JsonProperty("decider_conditions")
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private DeciderConditions deciderConditions;
+
+    @JsonProperty("circuit_condition")
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private DeciderConditions circuitCondition;
 }

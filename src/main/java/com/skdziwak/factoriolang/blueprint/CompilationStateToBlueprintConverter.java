@@ -36,6 +36,8 @@ public class CompilationStateToBlueprintConverter {
         private final Entity constantCombinator;
         @Getter
         private final Entity deciderCombinator;
+        @Getter
+        private final Entity lamp;
 
         Block(Blueprint blueprint, Instruction instruction, int x) {
             Map<String, Integer> signals = instruction.toMap();
@@ -65,11 +67,26 @@ public class CompilationStateToBlueprintConverter {
 
             deciderCombinator.getConnections().connect(Connections.Port.PORT_1, Connections.Cable.GREEN, constantCombinator);
             constantCombinator.getConnections().connect(Connections.Port.PORT_1, Connections.Cable.GREEN, deciderCombinator, 1);
+
+            lamp = new Entity(blueprint.nextId(), "small-lamp");
+            lamp.setPosition(new Position((double) x, -1.5));
+            controlBehavior = lamp.getControlBehavior();
+            controlBehavior.setCircuitCondition(DeciderConditions.builder()
+                    .firstSignal(new Signal("virtual", "signal-E"))
+                    .comparator("=")
+                    .constant(x)
+                    .outputSignal(null)
+                    .copyCountFromInput(null)
+                    .build());
+
+            lamp.getConnections().connect(Connections.Port.PORT_1, Connections.Cable.RED, deciderCombinator, 1);
+            deciderCombinator.getConnections().connect(Connections.Port.PORT_1, Connections.Cable.RED, lamp);
         }
 
         void addToBlueprint(Blueprint blueprint) {
             blueprint.getEntities().add(constantCombinator);
             blueprint.getEntities().add(deciderCombinator);
+            blueprint.getEntities().add(lamp);
         }
 
         void connect(Block block) {
