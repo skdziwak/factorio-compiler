@@ -40,6 +40,7 @@ public final class AssemblyHumanizer {
             case SET_REGISTER -> "Assign value " + instruction.getSignalC() + " to register " + instruction.getSignalB();
             case COPY_REG_TO_RAM_DYNAMICALLY -> "Copy register " + instruction.getSignalB() + " to RAM(register " + instruction.getSignalC() + ")";
             case COPY_RAM_TO_REG_DYNAMICALLY -> "Copy RAM(register " + instruction.getSignalB() + ") to register " + instruction.getSignalC();
+            case COPY_REG_TO_OUTPUT -> "Copy register " + instruction.getSignalB() + " to output " + instruction.getSignalC();
             default -> "[UNKNOWN OPERATION]";
         };
     }
