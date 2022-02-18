@@ -12,6 +12,7 @@ import com.skdziwak.factoriolang.tree.functions.Function;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class FunctionCall extends Expression {
 
@@ -39,18 +40,17 @@ public class FunctionCall extends Expression {
             throw new CompilationException("Function " + identifier + " can not be called like that. Arguments count does not match.");
         }
 
-        for (int i = 0 ; i < arguments.size() ; i++) {
-            arguments.get(i).compile(state);
-            state.popReg(1);
-            state.copyRegister(1, HardwareConstants.FUNCTION_ARG_REGISTERS[i]);
-        }
-
-        int jumpStateIndex = state.getNextIndex() + 2;
-        state.addInstruction(new Instruction(InstructionType.SET_REGISTER, 1).setSignalC(() -> jumpStateIndex - function.getEndIndex()));
+        AtomicReference<Integer> jumpStateIndexReference = new AtomicReference<>();
+        state.addInstruction(new Instruction(InstructionType.SET_REGISTER, 1).setSignalC(() -> jumpStateIndexReference.get() - function.getEndIndex()));
         state.pushReg(1);
 
+        for (Expression argument : arguments) {
+            argument.compile(state);
+        }
+
+        jumpStateIndexReference.set(state.getNextIndex());
         Instruction jumpInstruction = new Instruction(InstructionType.JUMP_CONSTANT_OFFSET)
-                .setSignalB(() -> function.getStartIndex() - jumpStateIndex - 1);
+                .setSignalB(() -> function.getStartIndex() - jumpStateIndexReference.get() - 1);
         state.addInstruction(jumpInstruction);
 
         if (functionContext != null) {
