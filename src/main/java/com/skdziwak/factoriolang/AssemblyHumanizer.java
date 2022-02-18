@@ -38,6 +38,8 @@ public final class AssemblyHumanizer {
             case JUMP_DYNAMIC_OFFSET -> "Jump with dynamic offset from register 8";
             case CONDITIONAL_JUMP_DYNAMIC_OFFSET -> "Jump with dynamic offset from register 8 if register 1 is equal to 0";
             case SET_REGISTER -> "Assign value " + instruction.getSignalC() + " to register " + instruction.getSignalB();
+            case COPY_REG_TO_RAM_DYNAMICALLY -> "Copy register " + instruction.getSignalB() + " to RAM(register " + instruction.getSignalC() + ")";
+            case COPY_RAM_TO_REG_DYNAMICALLY -> "Copy RAM(register " + instruction.getSignalB() + ") to register " + instruction.getSignalC();
             default -> "[UNKNOWN OPERATION]";
         };
     }
