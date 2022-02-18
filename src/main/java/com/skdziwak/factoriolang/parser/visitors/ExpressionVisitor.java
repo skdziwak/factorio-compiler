@@ -115,11 +115,11 @@ public class ExpressionVisitor extends LangBaseVisitor<Expression> {
 
     @Override
     public Expression visitArrayExpression(LangParser.ArrayExpressionContext ctx) {
-        return new ConstantExpression(1);
+        return new DereferenceArrayExpression(ctx.getChild(0).getText(), ctx.getChild(2).accept(this));
     }
 
     @Override
     public Expression visitDereference(LangParser.DereferenceContext ctx) {
-        return new ConstantExpression(1);
+        return new DereferenceExpression(ctx.getChild(1).accept(this));
     }
 }

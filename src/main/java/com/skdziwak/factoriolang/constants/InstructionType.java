@@ -15,7 +15,9 @@ public enum InstructionType {
     CONDITIONAL_JUMP_DYNAMIC_OFFSET(10),
     COPY_INPUT_TO_REG(11),
     COPY_REG_TO_OUTPUT(12),
-    SET_REGISTER(13);
+    SET_REGISTER(13),
+    COPY_REG_TO_RAM_DYNAMICALLY(14),
+    COPY_RAM_TO_REG_DYNAMICALLY(15);
 
     private final int signal;
 
