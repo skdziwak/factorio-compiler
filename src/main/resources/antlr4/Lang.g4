@@ -11,18 +11,21 @@ args: (expr ',')* expr | ;
 statements: stmt*;
 stmt:
       IDENTIFIER '=' expr ';'                       # AssignmentStatement
+    | '*' expr '=' expr ';'                         # PointerAssignmentStatement
+    | IDENTIFIER '[' expr ']' '=' expr ';'          # ArrayAssignmentStatement
     | 'output' '[' NUM ']' '=' expr ';'             # OutputStatement
     | expr ';'                                      # ExpressionStatement
     | '{' stmt+ '}'                                 # MultipleStatements
     | 'if' '(' expr ')' stmt 'else' stmt            # IfElseStatement
     | 'if' '(' expr ')' stmt                        # IfStatement
     | 'while' '(' expr ')' stmt                     # WhileStatement
-    | 'var' IDENTIFIER ';'                          # VarDeclare
-    | 'var' IDENTIFIER '=' expr ';'                 # VarDeclareDefine
+    | ('var' | 'var*') IDENTIFIER ';'               # VarDeclare
+    | ('var' | 'var*') IDENTIFIER '=' expr ';'      # VarDeclareDefine
 ;
 
 expr:
       '(' expr ')'                                              # Parenthesis
+    | <assoc=right> '*' expr                                    # Dereference
     | <assoc=right> '-' expr                                    # UnaryMinus
     | <assoc=right> 'not' expr                                  # UnaryNot
     | expr op=('*' | '/' | '%') expr                            # MultiplicationPrecedenceOperation
@@ -32,6 +35,8 @@ expr:
     | expr 'and' expr                                           # AndOperator
     | expr 'or' expr                                            # OrOperator
     | 'input' '[' NUM ']'                                       # Input
+    | IDENTIFIER '[' expr ']'                                   # ArrayExpression
+    | 'malloc' '(' expr ')'                                     # Malloc
     | IDENTIFIER '(' args ')'                                   # FunctionCall
     | IDENTIFIER                                                # Variable
     | NUM                                                       # Number
