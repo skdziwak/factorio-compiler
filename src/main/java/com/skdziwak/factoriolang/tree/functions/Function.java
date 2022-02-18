@@ -15,12 +15,14 @@ public class Function implements Compilable, PreCompilable {
     private final List<Statement> statements;
     private final String returns;
     private Integer startIndex, endIndex;
+    private final FunctionContext functionContext;
 
     public Function(String identifier, List<String> arguments, List<Statement> statements, String returns) {
         this.identifier = identifier;
         this.arguments = arguments;
         this.statements = statements;
         this.returns = returns;
+        functionContext = new FunctionContext();
     }
 
     public String getIdentifier() {
@@ -45,7 +47,6 @@ public class Function implements Compilable, PreCompilable {
 
     @Override
     public void compile(CompilationState state) {
-        FunctionContext functionContext = new FunctionContext();
         arguments.forEach(functionContext::declareVariable);
 
         this.startIndex = state.getNextIndex();
@@ -77,6 +78,13 @@ public class Function implements Compilable, PreCompilable {
 
     @Override
     public void preCompile(CompilationState state) {
+        state.setFunctionContext(functionContext);
         state.addFunction(this);
+        for (Statement statement : this.statements) {
+            if (statement instanceof PreCompilable preCompilable) {
+                preCompilable.preCompile(state);
+            }
+        }
+        state.setFunctionContext(null);
     }
 }
