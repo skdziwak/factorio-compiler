@@ -12,6 +12,14 @@ statements: stmt*;
 stmt:
       IDENTIFIER '=' expr ';'                       # AssignmentStatement
     | '*' expr '=' expr ';'                         # PointerAssignmentStatement
+    | IDENTIFIER '++' ';'                           # Increment
+    | IDENTIFIER '--' ';'                           # Decrement
+    | IDENTIFIER '+=' expr ';'                      # IncrementN
+    | IDENTIFIER '-=' expr ';'                      # DecrementN
+    | IDENTIFIER '[' expr ']' '++' ';'              # IncrementArr
+    | IDENTIFIER '[' expr ']' '--' ';'              # DecrementArr
+    | IDENTIFIER '[' expr ']' '+=' expr ';'         # IncrementArrN
+    | IDENTIFIER '[' expr ']' '-=' expr ';'         # DecrementArrN
     | IDENTIFIER '[' expr ']' '=' expr ';'          # ArrayAssignmentStatement
     | 'output' '[' NUM ']' '=' expr ';'             # OutputStatement
     | expr ';'                                      # ExpressionStatement

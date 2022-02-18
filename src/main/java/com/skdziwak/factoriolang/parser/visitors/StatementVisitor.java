@@ -2,9 +2,12 @@ package com.skdziwak.factoriolang.parser.visitors;
 
 import com.skdziwak.factoriolang.antlr4.LangBaseVisitor;
 import com.skdziwak.factoriolang.antlr4.LangParser;
+import com.skdziwak.factoriolang.constants.MathOperator;
 import com.skdziwak.factoriolang.tree.Expression;
 import com.skdziwak.factoriolang.tree.Statement;
+import com.skdziwak.factoriolang.tree.expressions.BinaryOperation;
 import com.skdziwak.factoriolang.tree.expressions.ConstantExpression;
+import com.skdziwak.factoriolang.tree.expressions.VariableExpression;
 import com.skdziwak.factoriolang.tree.statements.*;
 
 import java.util.ArrayList;
@@ -75,5 +78,91 @@ public class StatementVisitor extends LangBaseVisitor<Statement> {
                 ctx.getChild(0).getText(),
                 ctx.getChild(2).accept(expressionVisitor),
                 ctx.getChild(5).accept(expressionVisitor));
+    }
+
+    @Override
+    public Statement visitIncrement(LangParser.IncrementContext ctx) {
+        String identifier = ctx.getChild(0).getText();
+        return new AssignmentStatement(identifier, new BinaryOperation(new VariableExpression(identifier), MathOperator.ADD, new ConstantExpression(1)));
+    }
+
+    @Override
+    public Statement visitDecrement(LangParser.DecrementContext ctx) {
+        String identifier = ctx.getChild(0).getText();
+        return new AssignmentStatement(identifier, new BinaryOperation(new VariableExpression(identifier), MathOperator.SUBTRACT, new ConstantExpression(1)));
+    }
+
+    @Override
+    public Statement visitIncrementN(LangParser.IncrementNContext ctx) {
+        String identifier = ctx.getChild(0).getText();
+        Expression n = ctx.getChild(2).accept(expressionVisitor);
+        return new AssignmentStatement(identifier, new BinaryOperation(new VariableExpression(identifier), MathOperator.ADD, n));
+    }
+
+    @Override
+    public Statement visitDecrementN(LangParser.DecrementNContext ctx) {
+        String identifier = ctx.getChild(0).getText();
+        Expression n = ctx.getChild(2).accept(expressionVisitor);
+        return new AssignmentStatement(identifier, new BinaryOperation(new VariableExpression(identifier), MathOperator.SUBTRACT, n));
+    }
+
+    @Override
+    public Statement visitIncrementArr(LangParser.IncrementArrContext ctx) {
+        String identifier = ctx.getChild(0).getText();
+        return new DereferenceAssignmentStatement(
+                new BinaryOperation(
+                        new VariableExpression(identifier), MathOperator.ADD, ctx.getChild(2).accept(expressionVisitor)),
+                new BinaryOperation(
+                        new DereferenceExpression(new BinaryOperation(
+                                new VariableExpression(identifier), MathOperator.ADD, ctx.getChild(2).accept(expressionVisitor))),
+                        MathOperator.ADD,
+                        new ConstantExpression(1)
+                )
+        );
+    }
+
+    @Override
+    public Statement visitDecrementArr(LangParser.DecrementArrContext ctx) {
+        String identifier = ctx.getChild(0).getText();
+        return new DereferenceAssignmentStatement(
+                new BinaryOperation(
+                        new VariableExpression(identifier), MathOperator.ADD, ctx.getChild(2).accept(expressionVisitor)),
+                new BinaryOperation(
+                        new DereferenceExpression(new BinaryOperation(
+                                new VariableExpression(identifier), MathOperator.ADD, ctx.getChild(2).accept(expressionVisitor))),
+                        MathOperator.SUBTRACT,
+                        new ConstantExpression(1)
+                )
+        );
+    }
+
+    @Override
+    public Statement visitIncrementArrN(LangParser.IncrementArrNContext ctx) {
+        String identifier = ctx.getChild(0).getText();
+        return new DereferenceAssignmentStatement(
+                new BinaryOperation(
+                        new VariableExpression(identifier), MathOperator.ADD, ctx.getChild(2).accept(expressionVisitor)),
+                new BinaryOperation(
+                        new DereferenceExpression(new BinaryOperation(
+                                new VariableExpression(identifier), MathOperator.ADD, ctx.getChild(2).accept(expressionVisitor))),
+                        MathOperator.ADD,
+                        ctx.getChild(5).accept(expressionVisitor)
+                )
+        );
+    }
+
+    @Override
+    public Statement visitDecrementArrN(LangParser.DecrementArrNContext ctx) {
+        String identifier = ctx.getChild(0).getText();
+        return new DereferenceAssignmentStatement(
+                new BinaryOperation(
+                        new VariableExpression(identifier), MathOperator.ADD, ctx.getChild(2).accept(expressionVisitor)),
+                new BinaryOperation(
+                        new DereferenceExpression(new BinaryOperation(
+                                new VariableExpression(identifier), MathOperator.ADD, ctx.getChild(2).accept(expressionVisitor))),
+                        MathOperator.SUBTRACT,
+                        ctx.getChild(5).accept(expressionVisitor)
+                )
+        );
     }
 }
