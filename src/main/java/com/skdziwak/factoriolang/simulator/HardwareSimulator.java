@@ -6,15 +6,18 @@ import com.skdziwak.factoriolang.compilation.Instruction;
 import com.skdziwak.factoriolang.constants.InstructionType;
 import com.skdziwak.factoriolang.constants.MathOperator;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class HardwareSimulator {
     private final int[] registers = new int[HardwareConstants.REGISTERS_COUNT];
     private final LinkedList<Integer> stack = new LinkedList<>();
     private final int[] ram = new int[HardwareConstants.RAM_SIZE];
+    private final int[] outputs = new int[HardwareConstants.OUTPUT_SIZE];
+    private final Map<Integer, Integer> inputs = new HashMap<>();
     private int currentIndex = 0;
+    private int maxRamIndex = 0;
+    private int maxOutputIndex = 0;
 
     public String simulate(List<Instruction> instructionList, int limit) {
         StringBuilder stringBuilder = new StringBuilder();
@@ -41,15 +44,25 @@ public class HardwareSimulator {
         }
         stringBuilder.append("\nRegister values: \n");
         arrayToString(stringBuilder, registers);
-        stringBuilder.append("\nRAM values: \n");
-        arrayToString(stringBuilder, ram);
+        if (maxRamIndex > 0) {
+            stringBuilder.append("\nRAM values: \n");
+            arrayToString(stringBuilder, ram, maxRamIndex);
+        }
+        if (maxOutputIndex > 0) {
+            stringBuilder.append("\nOUTPUT values: \n");
+            arrayToString(stringBuilder, outputs, maxOutputIndex);
+        }
         return stringBuilder.toString();
     }
 
-    private void arrayToString(StringBuilder stringBuilder, int[] arr) {
-        for (int i = 0 ; i < arr.length ; i++) {
+    private void arrayToString(StringBuilder stringBuilder, int[] arr, int len) {
+        for (int i = 0 ; i < len ; i++) {
             stringBuilder.append("\t").append(i + 1).append(": ").append(arr[i]).append("\n");
         }
+    }
+
+    private void arrayToString(StringBuilder stringBuilder, int[] arr) {
+        arrayToString(stringBuilder, arr, arr.length);
     }
 
     private void simulate(Instruction instruction) {
@@ -79,6 +92,8 @@ public class HardwareSimulator {
             case SET_REGISTER -> setRegister(b, c);
             case COPY_REG_TO_RAM_DYNAMICALLY -> setRAM(getRegister(c), getRegister(b));
             case COPY_RAM_TO_REG_DYNAMICALLY -> setRegister(c, getRAM(getRegister(b)));
+            case COPY_REG_TO_OUTPUT -> setOutput(c, getRegister(b));
+            case COPY_INPUT_TO_REG -> setRegister(c, getInput(b));
         }
     }
     private int simulateMath(MathOperator operator) {
@@ -99,6 +114,24 @@ public class HardwareSimulator {
             case AND -> getRegister(1) & getRegister(2);
             case OR -> getRegister(1) | getRegister(2);
         };
+    }
+
+    private int getInput(int index) {
+        return inputs.computeIfAbsent(index, this::fetchInput);
+    }
+
+    private int fetchInput(int index) {
+        System.out.print("input[" + index + "] = ");
+        Scanner scanner = new Scanner(System.in);
+        return scanner.nextInt();
+    }
+
+    private void validateOutputIndex(int index) {
+        if (index < 1) {
+            throw new SimulationException("Unable to access output at address lower than 1");
+        } else if (index > HardwareConstants.RAM_SIZE) {
+            throw new SimulationException("Unable to access output at address greater than " + HardwareConstants.RAM_SIZE);
+        }
     }
 
     private void validateRamIndex(int index) {
@@ -124,7 +157,18 @@ public class HardwareSimulator {
 
     private void setRAM(int index, int value) {
         validateRamIndex(index);
+        if (this.maxRamIndex < index) {
+            this.maxRamIndex = index;
+        }
         this.ram[index - 1] = value;
+    }
+
+    private void setOutput(int index, int value) {
+        validateOutputIndex(index);
+        if (this.maxOutputIndex < index) {
+            this.maxOutputIndex = index;
+        }
+        this.outputs[index - 1] = value;
     }
 
     private void setRegister(int index, int value) {
