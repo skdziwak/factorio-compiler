@@ -38,6 +38,7 @@ public class HardwareSimulator {
             currentIndex++;
             i++;
         }
+        stringBuilder.append("\nTotal steps: ").append(i).append("\n");
         if (!this.stack.isEmpty()) {
             stringBuilder.append("\nStack values: ");
             stringBuilder.append(this.stack.stream().map(String::valueOf).collect(Collectors.joining(", "))).append("\n");
