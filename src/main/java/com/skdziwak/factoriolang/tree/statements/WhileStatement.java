@@ -2,11 +2,12 @@ package com.skdziwak.factoriolang.tree.statements;
 
 import com.skdziwak.factoriolang.compilation.CompilationState;
 import com.skdziwak.factoriolang.compilation.Instruction;
+import com.skdziwak.factoriolang.compilation.interfaces.PreCompilable;
 import com.skdziwak.factoriolang.constants.InstructionType;
 import com.skdziwak.factoriolang.tree.Expression;
 import com.skdziwak.factoriolang.tree.Statement;
 
-public class WhileStatement extends Statement {
+public class WhileStatement extends Statement implements PreCompilable {
     private final Expression condition;
     private final Statement statement;
 
@@ -34,5 +35,12 @@ public class WhileStatement extends Statement {
 
         escapeInstruction.setSignalB(endIndex - escapeStateIndex - 1);
         loopInstruction.setSignalB(startIndex - loopIndex - 1);
+    }
+
+    @Override
+    public void preCompile(CompilationState state) {
+        if (statement instanceof PreCompilable preCompilable) {
+            preCompilable.preCompile(state);
+        }
     }
 }

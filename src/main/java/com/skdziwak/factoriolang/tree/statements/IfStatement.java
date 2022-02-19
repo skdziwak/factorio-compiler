@@ -2,11 +2,12 @@ package com.skdziwak.factoriolang.tree.statements;
 
 import com.skdziwak.factoriolang.compilation.CompilationState;
 import com.skdziwak.factoriolang.compilation.Instruction;
+import com.skdziwak.factoriolang.compilation.interfaces.PreCompilable;
 import com.skdziwak.factoriolang.constants.InstructionType;
 import com.skdziwak.factoriolang.tree.Expression;
 import com.skdziwak.factoriolang.tree.Statement;
 
-public class IfStatement extends Statement {
+public class IfStatement extends Statement implements PreCompilable {
     private final Expression condition;
     private final Statement statement;
 
@@ -28,5 +29,12 @@ public class IfStatement extends Statement {
         statement.compile(state);
         int endIndex = state.getNextIndex();
         jumpInstruction.setSignalB(endIndex - jumpIndex - 1);
+    }
+
+    @Override
+    public void preCompile(CompilationState state) {
+        if (statement instanceof PreCompilable preCompilable) {
+            preCompilable.preCompile(state);
+        }
     }
 }
