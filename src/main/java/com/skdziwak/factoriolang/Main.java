@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.skdziwak.factoriolang.blueprint.Blueprint;
 import com.skdziwak.factoriolang.blueprint.BlueprintEncoder;
 import com.skdziwak.factoriolang.blueprint.CompilationStateToBlueprintConverter;
+import com.skdziwak.factoriolang.bytecode.ProgramToBytecodeConverter;
 import com.skdziwak.factoriolang.compilation.CompilationState;
 import com.skdziwak.factoriolang.parser.ProgramParser;
 import com.skdziwak.factoriolang.simulator.HardwareSimulator;
@@ -24,6 +25,7 @@ public class Main {
         options.addOption("s", false, "Compile to signals");
         options.addOption("j", false, "Compile to json");
         options.addOption("b", false, "Compile to blueprint");
+        options.addOption("bc", false, "Compile to bytecode");
         options.addOption("h", false, "Compile to humanized assembly");
         options.addOption("sim", false, "Compile and simulate");
         options.addOption("sl", true, "Simulation length limit (default: " + DEFAULT_SIMULATION_LENGTH_LIMIT + ")");
@@ -79,6 +81,8 @@ public class Main {
                 } else {
                     output += simulator.simulate(compilationState.getInstructions(), DEFAULT_SIMULATION_LENGTH_LIMIT);
                 }
+            } else if (parse.hasOption("bc")) {
+                output = ProgramToBytecodeConverter.generateByteCode(compilationState);
             } else if (parse.hasOption("s")) {
                 output = compilationState.getStatesString();
             } else if (parse.hasOption("b")) {
