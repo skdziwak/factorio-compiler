@@ -47,22 +47,21 @@ public class Function implements Compilable, PreCompilable {
 
     @Override
     public void compile(CompilationState state) {
-        arguments.forEach(functionContext::declareVariable);
+        arguments.forEach(arg -> functionContext.declareVariable(state, arg));
 
         this.startIndex = state.getNextIndex();
         state.setFunctionContext(functionContext);
 
         for (int i = arguments.size() - 1 ; i >= 0 ; i--) {
-            state.popReg(HardwareConstants.FUNCTION_ARG_REGISTERS[i]);
+            state.popReg(1);
+            state.copyRegisterToRAM(1, functionContext.getVariableAddress(arguments.get(i)));
         }
 
         statements.forEach(statement -> statement.compile(state));
 
         if (this.returns != null) {
             if (functionContext.containsVariable(returns)) {
-                state.copyRegister(
-                        HardwareConstants.FUNCTION_ARG_REGISTERS[functionContext.indexOfVariable(returns)], 1
-                );
+                state.copyRAMtoRegister(functionContext.getVariableAddress(returns), 1);
             } else {
                 throw new CompilationException("Unable to return variable " + returns + " from function " + identifier
                         + "(" + String.join(", ", arguments) + ")");

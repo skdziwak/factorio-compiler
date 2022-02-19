@@ -17,15 +17,14 @@ public class AssignmentStatement extends Statement {
     @Override
     public void compile(CompilationState state) {
         FunctionContext functionContext = state.getFunctionContext();
+        int address;
         if (functionContext == null || !functionContext.containsVariable(variable)) {
-            int addr = state.getVariableAddress(variable);
-            value.compile(state);
-            state.popReg(1);
-            state.copyRegisterToRAM(1, addr);
+            address = state.getVariableAddress(variable);
         } else {
-            value.compile(state);
-            state.popReg(1);
-            state.copyRegister(1, HardwareConstants.FUNCTION_ARG_REGISTERS[functionContext.indexOfVariable(variable)]);
+            address = functionContext.getVariableAddress(variable);
         }
+        value.compile(state);
+        state.popReg(1);
+        state.copyRegisterToRAM(1, address);
     }
 }

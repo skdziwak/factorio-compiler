@@ -17,13 +17,9 @@ public class VariableExpression extends Expression {
         FunctionContext functionContext = state.getFunctionContext();
         if (functionContext == null || !functionContext.containsVariable(variable)) {
             state.copyRAMtoRegister(state.getVariableAddress(variable), 1);
-            state.pushReg(1);
         } else {
-            state.copyRegister(
-                    HardwareConstants.FUNCTION_ARG_REGISTERS[functionContext.indexOfVariable(variable)],
-                    1
-            );
-            state.pushReg(1);
+            state.copyRAMtoRegister(functionContext.getVariableAddress(variable), 1);
         }
+        state.pushReg(1);
     }
 }

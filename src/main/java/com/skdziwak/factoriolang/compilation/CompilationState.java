@@ -119,6 +119,10 @@ public class CompilationState {
         }
     }
 
+    public int allocateVariable() {
+        return nextFreeMemoryAddress++;
+    }
+
     public int getVariableAddress(String name) {
         if (this.variableAddresses.containsKey(name)) {
             return this.variableAddresses.get(name);

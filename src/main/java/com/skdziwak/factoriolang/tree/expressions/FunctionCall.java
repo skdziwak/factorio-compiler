@@ -13,6 +13,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.IntStream;
 
 public class FunctionCall extends Expression {
 
@@ -28,8 +29,14 @@ public class FunctionCall extends Expression {
     public void compile(CompilationState state) {
         FunctionContext functionContext = state.getFunctionContext();
 
+        List<String> vars = null;
+
         if (functionContext != null) {
-            Arrays.stream(HardwareConstants.FUNCTION_ARG_REGISTERS, 0, functionContext.numberOfVariables()).forEach(state::pushReg);
+            vars = functionContext.getVariablesList();
+            vars.forEach(var -> {
+                state.copyRAMtoRegister(functionContext.getVariableAddress(var), 1);
+                state.pushReg(1);
+            });
         }
 
         Function function = state.getFunction(identifier);
@@ -52,11 +59,16 @@ public class FunctionCall extends Expression {
         Instruction jumpInstruction = new Instruction(InstructionType.JUMP_CONSTANT_OFFSET)
                 .setSignalB(() -> function.getStartIndex() - jumpStateIndexReference.get() - 1);
         state.addInstruction(jumpInstruction);
+        state.copyRegister(1, 3);
 
         if (functionContext != null) {
-            Arrays.stream(HardwareConstants.FUNCTION_ARG_REGISTERS, 0, functionContext.numberOfVariables()).boxed().sorted(Collections.reverseOrder()).forEach(state::popReg);
+            Collections.reverse(vars);
+            vars.forEach(var -> {
+                state.popReg(1);
+                state.copyRegisterToRAM(1, functionContext.getVariableAddress(var));
+            });
         }
 
-        state.pushReg(1);
+        state.pushReg(3);
     }
 }

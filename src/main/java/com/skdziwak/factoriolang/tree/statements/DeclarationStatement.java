@@ -24,15 +24,8 @@ public class DeclarationStatement extends Statement implements PreCompilable {
 
     @Override
     public void compile(CompilationState state) {
-        FunctionContext functionContext = state.getFunctionContext();
         if (initialValue != null) {
-            initialValue.compile(state);
-            state.popReg(1);
-            if (functionContext == null) {
-                state.copyRegisterToRAM(1, address);
-            } else {
-                state.copyRegister(1, HardwareConstants.FUNCTION_ARG_REGISTERS[address]);
-            }
+            new AssignmentStatement(variable, initialValue).compile(state);
         }
     }
 
@@ -42,7 +35,7 @@ public class DeclarationStatement extends Statement implements PreCompilable {
         if (functionContext == null) {
             this.address = state.declareVariable(variable);
         } else {
-            this.address = functionContext.declareVariable(variable);
+            this.address = functionContext.declareVariable(state, variable);
         }
     }
 }
