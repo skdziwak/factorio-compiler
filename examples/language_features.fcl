@@ -78,3 +78,7 @@ x = mul(3, 4);
 # == != > < >= <=
 # and &
 # or |
+
+# Input and output arrays
+var* arr = input[1..4];
+output[1..4] = arr;

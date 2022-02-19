@@ -3,7 +3,7 @@
 *.iml
 target
 .attach_pid*
-*.fcl
+/*.fcl
 *.json
 *.txt
 dependency-reduced-pom.xml
