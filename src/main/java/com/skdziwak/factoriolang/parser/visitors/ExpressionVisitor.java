@@ -122,4 +122,9 @@ public class ExpressionVisitor extends LangBaseVisitor<Expression> {
     public Expression visitDereference(LangParser.DereferenceContext ctx) {
         return new DereferenceExpression(ctx.getChild(1).accept(this));
     }
+
+    @Override
+    public Expression visitInputArray(LangParser.InputArrayContext ctx) {
+        return new InputArrayExpression(Integer.parseInt(ctx.getChild(2).getText()), Integer.parseInt(ctx.getChild(4).getText()));
+    }
 }

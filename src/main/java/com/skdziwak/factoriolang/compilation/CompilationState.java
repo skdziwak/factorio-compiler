@@ -123,6 +123,14 @@ public class CompilationState {
         return nextFreeMemoryAddress++;
     }
 
+    public int allocateArray(int size) {
+        try {
+            return nextFreeMemoryAddress;
+        } finally {
+            nextFreeMemoryAddress += size;
+        }
+    }
+
     public int getVariableAddress(String name) {
         if (this.variableAddresses.containsKey(name)) {
             return this.variableAddresses.get(name);

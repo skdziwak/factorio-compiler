@@ -22,6 +22,7 @@ stmt:
     | IDENTIFIER '[' expr ']' '-=' expr ';'         # DecrementArrN
     | IDENTIFIER '[' expr ']' '=' expr ';'          # ArrayAssignmentStatement
     | 'output' '[' NUM ']' '=' expr ';'             # OutputStatement
+    | 'output' '[' NUM '..' NUM ']' '=' expr ';'    # OutputArrayStatement
     | expr ';'                                      # ExpressionStatement
     | '{' stmt+ '}'                                 # MultipleStatements
     | 'if' '(' expr ')' stmt 'else' stmt            # IfElseStatement
@@ -40,9 +41,10 @@ expr:
     | expr op=('+' | '-') expr                                  # AdditionPrecedenceOperation
     | expr op=('>>' | '<<') expr                                # ShiftOperation
     | expr op=('==' | '!=' | '>' | '<' | '>=' | '<=') expr      # Comparison
-    | expr ('and' | '&') expr                                           # AndOperator
-    | expr ('or' | '|') expr                                            # OrOperator
+    | expr ('and' | '&') expr                                   # AndOperator
+    | expr ('or' | '|') expr                                    # OrOperator
     | 'input' '[' NUM ']'                                       # Input
+    | 'input' '[' NUM '..' NUM ']'                              # InputArray
     | IDENTIFIER '[' expr ']'                                   # ArrayExpression
     | 'malloc' '(' expr ')'                                     # Malloc
     | IDENTIFIER '(' args ')'                                   # FunctionCall

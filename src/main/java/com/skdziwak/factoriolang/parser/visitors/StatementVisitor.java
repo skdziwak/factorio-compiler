@@ -165,4 +165,13 @@ public class StatementVisitor extends LangBaseVisitor<Statement> {
                 )
         );
     }
+
+    @Override
+    public Statement visitOutputArrayStatement(LangParser.OutputArrayStatementContext ctx) {
+        return new OutputArrayAssignmentStatement(
+                Integer.parseInt(ctx.getChild(2).getText()),
+                Integer.parseInt(ctx.getChild(4).getText()),
+                ctx.getChild(7).accept(expressionVisitor)
+        );
+    }
 }
