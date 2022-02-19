@@ -1,0 +1,80 @@
+# Declare variable (undefined initial value)
+var x;
+
+# Declare and define variable
+var x = 0;
+
+# Assign value
+x = 3;
+
+# Read input (constant index starting from 1)
+x = input[1];
+
+# Write to output (constant index starting from 1)
+output[1] = x;
+
+# Conditional statements
+if (x > 4) {
+    output[1] = 2;
+} else {
+    output[1] = 1;
+}
+
+# While loop
+var i = 0;
+while (i < 10) {
+    x = x * 2;
+    i++;
+}
+
+# Dynamic memory allocation and arrays
+var* array = malloc(5);
+
+# Equivalent statements
+array[0] = input[1];
+*array = input[1];
+
+# Equivalent statements
+array[2] = input[1];
+*(array + 2) = input[1];
+
+# Equivalent statements
+output[1] = array[2];
+output[1] = *(array + 2);
+
+# Increment/decrement operators
+x++;
+x--;
+x+=2;
+x-=2;
+arr[x]++;
+arr[x]--;
+arr[x] += y;
+arr[x] -= y;
+
+# Functions and variable scopes
+var a = 2;
+var c = 4;
+fn worker(a, b) {
+    output[1] = a;
+    output[2] = b;
+    output[3] = c;
+}
+worker(7, 8);
+# Output results: [7, 8, 4]
+# You can define local variables in functions
+
+# Returning value from function
+fn mul(a, b) {
+    a = a * b;
+} ret a;
+
+x = mul(3, 4);
+
+# Operators
+# * / %
+# + -
+# >> <<
+# == != > < >= <=
+# and &
+# or |
