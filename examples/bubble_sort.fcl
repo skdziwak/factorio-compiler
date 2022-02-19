@@ -5,11 +5,10 @@ fn sort(array, length) {
     while (i < length) {
         var j = i + 1;
         while (j < length) {
-            var a = array[i];
-            var b = array[j];
-            if (a > b) {
-                array[j] = a;
-                array[i] = b;
+            if (array[i] > array[j]) {
+                var x = array[j];
+                array[j] = array[i];
+                array[i] = x;
             }
             j++;
         }
