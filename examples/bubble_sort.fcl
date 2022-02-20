@@ -1,6 +1,6 @@
-var* arr = input[1..8];
+var* arr = input[1..16];
 
-fn sort(array, length) {
+fn bubbleSort(array, length) {
     var i = 0;
     while (i < length) {
         var j = i + 1;
@@ -16,6 +16,6 @@ fn sort(array, length) {
     }
 }
 
-sort(arr, 8);
+bubbleSort(arr, 16);
 
-output[1..8] = arr;
+output[1..16] = arr;

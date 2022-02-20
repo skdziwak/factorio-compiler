@@ -1,0 +1,62 @@
+var* arr = input[1..16];
+var len = 16;
+
+fn merge(array, left, mid, right) {
+    var subArrayOne = mid - left + 1;
+    var subArrayTwo = right - mid;
+
+    var* leftArray = malloc(subArrayOne);
+    var* rightArray = malloc(subArrayTwo);
+
+    var i = 0;
+    while (i < subArrayOne) {
+        leftArray[i] = array[left + i];
+        i++;
+    }
+    i = 0;
+    while (i < subArrayTwo) {
+        rightArray[i] = array[mid + 1 + i];
+        i++;
+    }
+
+    var indexOfSubArrayOne = 0;
+    var indexOfSubArrayTwo = 0;
+    var indexOfMergedArray = left;
+
+    while (indexOfSubArrayOne < subArrayOne and indexOfSubArrayTwo < subArrayTwo) {
+        if (leftArray[indexOfSubArrayOne] <= rightArray[indexOfSubArrayTwo]) {
+            array[indexOfMergedArray] = leftArray[indexOfSubArrayOne];
+            indexOfSubArrayOne++;
+        }
+        else {
+            array[indexOfMergedArray] = rightArray[indexOfSubArrayTwo];
+            indexOfSubArrayTwo++;
+        }
+        indexOfMergedArray++;
+    }
+
+    while (indexOfSubArrayOne < subArrayOne) {
+        array[indexOfMergedArray] = leftArray[indexOfSubArrayOne];
+        indexOfSubArrayOne++;
+        indexOfMergedArray++;
+    }
+
+    while (indexOfSubArrayTwo < subArrayTwo) {
+        array[indexOfMergedArray] = rightArray[indexOfSubArrayTwo];
+        indexOfSubArrayTwo++;
+        indexOfMergedArray++;
+    }
+}
+
+fn mergeSort(array, begin, end) {
+    if (begin < end) {
+        var mid = begin + (end - begin) / 2;
+        mergeSort(array, begin, mid);
+        mergeSort(array, mid + 1, end);
+        merge(array, begin, mid, end);
+    }
+}
+
+mergeSort(arr, 0, len - 1);
+
+output[1..16] = arr;
